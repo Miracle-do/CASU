@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acteurs & Cas d'utilisation — Analyse terrain</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F8F6F2;--bg2:#EDEBE5;--ink:#16120E;--ink2:#4A4440;--ink3:#908880;--line:#DDD8D0;
+  --c1:#B52A2A;--c1l:#FDECEA;
+  --c2:#1455A4;--c2l:#E3EEFF;
+  --c3:#1A5C22;--c3l:#E6F4E8;
+  --c4:#C45200;--c4l:#FFF0E3;
+  --c5:#5B2D8E;--c5l:#F2ECF9;
+  --c6:#0E6B5E;--c6l:#E0F5F2;
+}
+body{background:var(--bg);color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:13px;line-height:1.55}
+
+.page{max-width:1320px;margin:0 auto;padding:44px 24px 80px}
+
+/* HEADER */
+.hdr{border-bottom:3px solid var(--ink);padding-bottom:18px;margin-bottom:28px}
+.eyebrow{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+h1{font-family:'Syne',sans-serif;font-size:clamp(26px,4vw,46px);font-weight:800;line-height:1.05;letter-spacing:-1px}
+h1 em{font-style:normal;background:var(--ink);color:var(--bg);padding:0 8px}
+.sub{font-size:12.5px;color:var(--ink3);font-style:italic;margin-top:6px}
+
+/* SOURCES */
+.sources{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 26px}
+.src-card{flex:1;min-width:200px;background:white;border:1.5px solid var(--line);border-radius:6px;padding:12px 14px;box-shadow:3px 3px 0 var(--line)}
+.src-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.src-detail{font-size:11px;color:var(--ink3)}
+.src-tag{display:inline-block;margin-top:4px;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;letter-spacing:.5px;background:var(--bg2);color:var(--ink2);border:1px solid var(--line)}
+
+/* COUNTERS */
+.counters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.cnt{background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:4px;text-align:center;min-width:90px}
+.cnt-n{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1;display:block}
+.cnt-l{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;opacity:.6;display:block;margin-top:2px}
+
+/* EVIDENCE BLOCK */
+.evidence-section{margin-bottom:28px;background:white;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:4px 4px 0 var(--line)}
+.ev-title{padding:10px 16px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;background:var(--bg2);border-bottom:1px solid var(--line);color:var(--ink2)}
+.ev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0}
+.ev-item{padding:12px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ev-item:last-child{border-right:none}
+.ev-q{font-size:10px;font-weight:600;color:var(--ink3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px}
+.ev-a{font-size:12px;color:var(--ink2)}
+.ev-tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;margin-right:3px;margin-bottom:2px;background:var(--bg2);border:1px solid var(--line);color:var(--ink2)}
+
+/* MAIN TABLE */
+.wrap{border:2px solid var(--ink);border-radius:8px;overflow:hidden;box-shadow:6px 6px 0 rgba(0,0,0,0.12);margin-bottom:28px}
+table{width:100%;border-collapse:collapse;min-width:900px}
+
+thead tr{background:var(--ink)}
+thead th{padding:12px 13px;font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--bg);text-align:left;border-right:1px solid rgba(255,255,255,.1)}
+thead th:last-child{border-right:none}
+
+.sec-row td{padding:8px 14px;font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;border-bottom:1px solid rgba(0,0,0,.1)}
+
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:hover{background:rgba(0,0,0,.018)}
+tbody tr:last-child td{border-bottom:none}
+
+td.actor-cell{border-right:2px solid var(--line);white-space:nowrap;width:1%}
+.actor-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px 5px 8px;border-radius:20px;font-size:11.5px;font-weight:600;border:1.5px solid;white-space:nowrap}
+.actor-sub{font-size:10.5px;color:var(--ink3);font-style:italic;max-width:155px;white-space:normal;line-height:1.3;margin-top:5px}
+.actor-block{display:flex;flex-direction:column}
+
+td.uc-cell{border-right:1px solid var(--line);font-weight:500;font-size:12.5px;min-width:190px}
+.uc-num{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--ink3);letter-spacing:1px;display:block;margin-bottom:2px}
+
+td.desc-cell{border-right:1px solid var(--line);font-size:12px;color:var(--ink2);min-width:230px}
+
+td.src-cell{border-right:1px solid var(--line);min-width:130px}
+.src-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;margin-bottom:3px;border:1px solid}
+.s-v{background:#FFF7E0;color:#92600A;border-color:#F5CC68}
+.s-m{background:#E8F5E9;color:#1B5E20;border-color:#81C784}
+.s-g{background:#E3EEFF;color:#0D3B8C;border-color:#90B4F5}
+.s-exp{background:#F3E5F5;color:#4A148C;border-color:#CE93D8}
+
+td.rel-cell{min-width:170px}
+.rel-entry{display:flex;align-items:flex-start;gap:5px;margin-bottom:4px;font-size:11px;color:var(--ink2);line-height:1.35}
+.rel-entry:last-child{margin-bottom:0}
+.rp{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;font-style:italic;flex-shrink:0}
+.rp-inc{background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7}
+.rp-ext{background:#FFF8E1;color:#C45200;border:1px solid #FFB74D}
+.rp-ass{background:#E3EEFF;color:#1455A4;border:1px solid #90B4F5}
+
+/* actor colors */
+.ap1{color:var(--c1);border-color:var(--c1);background:var(--c1l)}
+.ap2{color:var(--c2);border-color:var(--c2);background:var(--c2l)}
+.ap3{color:var(--c3);border-color:var(--c3);background:var(--c3l)}
+.ap4{color:var(--c4);border-color:var(--c4);background:var(--c4l)}
+.ap5{color:var(--c5);border-color:var(--c5);background:var(--c5l)}
+.ap6{color:var(--c6);border-color:var(--c6);background:var(--c6l)}
+.sec1{background:var(--c1l);color:var(--c1)}
+.sec2{background:var(--c2l);color:var(--c2)}
+.sec3{background:var(--c3l);color:var(--c3)}
+.sec4{background:var(--c4l);color:var(--c4)}
+.sec5{background:var(--c5l);color:var(--c5)}
+.sec6{background:var(--c6l);color:var(--c6)}
+
+/* FOOTER */
+.note{padding:14px 18px;background:white;border-left:4px solid var(--ink);border-radius:0 6px 6px 0;font-size:11.5px;color:var(--ink3);font-style:italic;line-height:1.6;border:1.5px solid var(--line);border-left:4px solid var(--ink)}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;padding:12px 16px;background:white;border:1.5px solid var(--line);border-radius:6px;margin-bottom:16px}
+.leg{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink2)}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+@media(max-width:700px){.page{padding:20px 12px 40px}h1{font-size:22px}.ev-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="eyebrow">Analyse terrain · Bénin · 3 clubs enquêtés</div>
+  <h1>ACTEURS & <em>CAS D'UTILISATION</em></h1>
+  <div class="sub">Déterminés à partir des réponses collectées sur le terrain — croisées avec l'expertise métier</div>
+</div>
+
+<!-- SOURCES CLUBS -->
+<div class="sources">
+  <div class="src-card">
+    <div class="src-name">🔴 VIGUEUR FC</div>
+    <div class="src-detail">Fondé en 2006 · FBF · Football</div>
+    <div class="src-detail">12 membres actifs · U13 U15 U17 Seniors</div>
+    <div><span class="src-tag">Enquêteur : SODJI Augusto</span></div>
+  </div>
+  <div class="src-card">
+    <div class="src-name">🟢 MAHUDONU SPORTS-ARTS (MSA)</div>
+    <div class="src-detail">Fondé en 2017 · Multi-sport</div>
+    <div class="src-detail">150 membres · Football, Basketball, Volley, Athlétisme</div>
+    <div><span class="src-tag">Enquêteur : Dochanou Yanees</span></div>
+  </div>
+  <div class="src-card">
+    <div class="src-name">🔵 AS GOMIDO</div>
+    <div class="src-detail">Fondé en 2020 · FBF · Football</div>
+    <div class="src-detail">U20, U17 Féminin, Seniors · Plateforme febefoot connect</div>
+    <div><span class="src-tag">Enquêteur : Bonaventure SOSSOUKPO</span></div>
+  </div>
+</div>
+
+<!-- COUNTERS -->
+<div class="counters">
+  <div class="cnt"><span class="cnt-n">6</span><span class="cnt-l">Acteurs</span></div>
+  <div class="cnt"><span class="cnt-n">42</span><span class="cnt-l">Cas d'utilisation</span></div>
+  <div class="cnt"><span class="cnt-n">3</span><span class="cnt-l">Clubs sources</span></div>
+  <div class="cnt"><span class="cnt-n">39</span><span class="cnt-l">Questions analysées</span></div>
+</div>
+
+<!-- PREUVES TERRAIN -->
+<div class="evidence-section">
+  <div class="ev-title">📋 Faits saillants extraits des réponses terrain</div>
+  <div class="ev-grid">
+    <div class="ev-item">
+      <div class="ev-q">Paiement cotisation</div>
+      <div class="ev-a"><span class="ev-tag">Espèces + reçu papier</span><span class="ev-tag">Mobile Money</span> — unanime chez les 3 clubs</div>
+    </div>
+    <div class="ev-item">
+      <div class="ev-q">Inscription</div>
+      <div class="ev-a"><span class="ev-tag">Formulaire papier</span> uniquement — aucune appli actuelle</div>
+    </div>
+    <div class="ev-item">
+      <div class="ev-q">Gestion licences</div>
+      <div class="ev-a">Plateforme <span class="ev-tag">febefoot connect</span> (AS GOMIDO) · manuelle pour les autres</div>
+    </div>
+    <div class="ev-item">
+      <div class="ev-q">Présence aux séances</div>
+      <div class="ev-a"><span class="ev-tag">Feuille papier</span> (Vigueur) · <span class="ev-tag">Cahier entraîneur</span> (MSA) · <span class="ev-tag">Aucun suivi</span> (Gomido)</div>
+    </div>
+    <div class="ev-item">
+      <div class="ev-q">Cotisation obligatoire ?</div>
+      <div class="ev-a">Vigueur FC : <span class="ev-tag">Oui (entr. + compét.)</span> · MSA & Gomido : <span class="ev-tag">Non, facultative</span></div>
+    </div>
+    <div class="ev-item">
+      <div class="ev-q">Responsable matériel</div>
+      <div class="ev-a">Gomido : <span class="ev-tag">CM dédié</span> · Vigueur & MSA : <span class="ev-tag">Entraîneur</span></div>
+    </div>
+    <div class="ev-item">
+      <div class="ev-q">Communication programme</div>
+      <div class="ev-a"><span class="ev-tag">WhatsApp / SMS</span> · <span class="ev-tag">Réunion physique</span> — 0 outil digital interne</div>
+    </div>
+    <div class="ev-item">
+      <div class="ev-q">Arbitres</div>
+      <div class="ev-a">2 clubs → fédération · Gomido → les deux selon type de compétition</div>
+    </div>
+    <div class="ev-item">
+      <div class="ev-q">Terrain</div>
+      <div class="ev-a">Vigueur : <span class="ev-tag">Contrat avec gestionnaire</span> · MSA : <span class="ev-tag">Selon disponibilité stade</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:var(--c1)"></div>Joueur / Membre</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--c2)"></div>Entraîneur / Staff technique</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--c3)"></div>Dirigeant (Président · Trésorier · SG)</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--c4)"></div>Responsable Matériel</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--c5)"></div>Arbitre</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--c6)"></div>Fédération (FBF / febefoot connect)</div>
+  <div class="leg" style="margin-left:auto">
+    <span class="rp rp-inc">«include»</span>
+    <span class="rp rp-ext">«extend»</span>
+    <span class="rp rp-ass">association</span>
+  </div>
+</div>
+
+<!-- SOURCE LEGEND -->
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;font-size:11px;color:var(--ink3)">
+  <strong>Sources :</strong>
+  <span class="src-badge s-v">🔴 Vigueur</span>
+  <span class="src-badge s-m">🟢 MSA</span>
+  <span class="src-badge s-g">🔵 Gomido</span>
+  <span class="src-badge s-exp">🟣 Expert</span>
+  <span style="font-style:italic">— déduites de la logique métier non couverte par les réponses</span>
+</div>
+
+<!-- MAIN TABLE -->
+<div class="wrap">
+<table>
+  <thead>
+    <tr>
+      <th style="width:160px">Acteur</th>
+      <th style="width:185px">Cas d'utilisation</th>
+      <th>Description — basée sur le terrain</th>
+      <th style="width:130px">Source(s)</th>
+      <th style="width:185px">Relations UML</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- ══ JOUEUR ══ -->
+    <tr class="sec-row"><td colspan="5" class="sec1">👤 JOUEUR / MEMBRE</td></tr>
+
+    <tr>
+      <td class="actor-cell" rowspan="8">
+        <div class="actor-block">
+          <div class="actor-pill ap1">👤 Joueur</div>
+          <div class="actor-sub">Licencié ou non. Catégories : U13, U15, U17, U20, Sénior, Féminin. Tous clubs.</div>
+        </div>
+      </td>
+      <td class="uc-cell"><span class="uc-num">UC-J01</span>S'inscrire au club</td>
+      <td class="desc-cell">Remplit le formulaire papier au bureau. Fournit CNI, photo, autorisation parentale si mineur. Système remplace ce formulaire papier.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Fournir pièces justificatives</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Joindre autorisation parentale (mineur)</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-J02</span>Payer sa cotisation</td>
+      <td class="desc-cell">Règle la cotisation (mensuelle chez Vigueur, annuelle chez MSA/Gomido) en espèces ou via Mobile Money. Reçoit un reçu papier.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Générer un reçu de paiement</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Envoyer rappel si impayé (Vigueur)</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-J03</span>Confirmer sa présence à un entraînement</td>
+      <td class="desc-cell">Le joueur signale sa disponibilité pour la séance planifiée. Remplace le système actuel de feuille papier ou cahier entraîneur.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier cotisation (Vigueur)</div>
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier appartenance à l'équipe</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-J04</span>Consulter son profil & statut</td>
+      <td class="desc-cell">Accède à ses informations personnelles, statut de licence, cotisation à jour, équipe d'appartenance et sanctions en cours.</td>
+      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Voir statut licence & cotisation</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-J05</span>Consulter le planning d'entraînement</td>
+      <td class="desc-cell">Visualise les séances planifiées. Remplace la communication actuelle par WhatsApp/SMS ou réunion physique (pratique des 3 clubs).</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Recevoir notification de modification</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-J06</span>Consulter ses statistiques</td>
+      <td class="desc-cell">Visualise ses performances individuelles : présences, sélections, buts, cartons. Actuellement inexistant — besoin exprimé implicitement.</td>
+      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Consulter classement équipe</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-J07</span>Emprunter un équipement</td>
+      <td class="desc-cell">Fait une demande de prêt de matériel. Géré par l'entraîneur (Vigueur, MSA) ou par le CM dédié (Gomido). Le système trace le prêt.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier disponibilité équipement</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler dommage à retour</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-J08</span>Consulter les résultats & classement</td>
+      <td class="desc-cell">Accède aux scores des derniers matchs et au classement. Actuellement transmis par la fédération ou communiqué verbalement.</td>
+      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Voir feuille de match</div>
+      </td>
+    </tr>
+
+    <!-- ══ ENTRAÎNEUR ══ -->
+    <tr class="sec-row"><td colspan="5" class="sec2">🏋️ ENTRAÎNEUR / STAFF TECHNIQUE</td></tr>
+
+    <tr>
+      <td class="actor-cell" rowspan="9">
+        <div class="actor-block">
+          <div class="actor-pill ap2">🏋️ Entraîneur</div>
+          <div class="actor-sub">Dédié par équipe (MSA, Gomido) ou mutualisé selon saison (Vigueur). Gère aussi le matériel chez Vigueur et MSA.</div>
+        </div>
+      </td>
+      <td class="uc-cell"><span class="uc-num">UC-E01</span>Planifier un entraînement</td>
+      <td class="desc-cell">Définit date, heure, lieu, type de séance (3x/semaine minimum pour les 3 clubs). Planning fixe ou variable selon compétitions. Communique ensuite par WhatsApp.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Réserver le terrain</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Notifier les joueurs de l'équipe</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-E02</span>Annuler / modifier un entraînement</td>
+      <td class="desc-cell">MSA mentionne une disponibilité variable du stade. Gomido a un chronogramme avec le gestionnaire. Le système notifie automatiquement les joueurs.</td>
+      <td class="src-cell"><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Notifier annulation aux joueurs</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-E03</span>Enregistrer les présences</td>
+      <td class="desc-cell">Marque présents/absents. Vigueur : feuille papier. MSA : cahier. Gomido : aucun suivi. Le système digitalise ce processus critique (absences → pénalités chez Vigueur).</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Alerter absence répétée (→ pénalité)</div>
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Générer rapport de présences</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-E04</span>Composer la liste de match</td>
+      <td class="desc-cell">Vigueur : selon performance. MSA : entraîneur responsable. Gomido : sélectionneur → SG produit la liste officielle avec numéros de licence.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier éligibilité chaque joueur</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Soumettre liste à l'arbitre / SG</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-E05</span>Affecter un joueur à une équipe</td>
+      <td class="desc-cell">Critères : âge/catégorie, niveau sportif, poste, décision coach. Un junior performant peut monter chez les seniors (Vigueur, Gomido).</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier critères âge / niveau</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Valider promotion inter-équipes</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-E06</span>Saisir les statistiques de match</td>
+      <td class="desc-cell">Enregistre buts, passes, cartons après chaque rencontre. Actuellement verbal ou papier. Alimente le suivi de performance pour les sélections futures.</td>
+      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour stats individuelles</div>
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Mettre à jour classement</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-E07</span>Gérer le matériel sportif</td>
+      <td class="desc-cell">Rôle assumé par l'entraîneur chez Vigueur (inventaire périodique) et MSA. Chez Gomido, c'est le CM. Le système unifie cette gestion.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour inventaire</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler équipement endommagé</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-E08</span>Consulter le calendrier des compétitions</td>
+      <td class="desc-cell">Visualise les prochains matchs pour adapter le planning des séances. Mentionné explicitement par MSA (planning variable selon compétitions).</td>
+      <td class="src-cell"><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Adapter planning entraînement</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-E09</span>Évaluer un joueur</td>
+      <td class="desc-cell">Gomido mentionne explicitement la « performance » comme critère de sélection et de promotion inter-équipes. Formalise l'évaluation continue.</td>
+      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Consulter historique du joueur</div>
+      </td>
+    </tr>
+
+    <!-- ══ DIRIGEANT ══ -->
+    <tr class="sec-row"><td colspan="5" class="sec3">🏛️ DIRIGEANT — Président · Trésorier · Secrétaire Général</td></tr>
+
+    <tr>
+      <td class="actor-cell" rowspan="11">
+        <div class="actor-block">
+          <div class="actor-pill ap3">🏛️ Dirigeant</div>
+          <div class="actor-sub">Président, VP, SG, SGA, Trésorier, Organisateur. Structure complète identifiée chez les 3 clubs.</div>
+        </div>
+      </td>
+      <td class="uc-cell"><span class="uc-num">UC-D01</span>Valider l'inscription d'un membre</td>
+      <td class="desc-cell">Examine le dossier papier, approuve ou refuse. Crée le compte dans le système. Rôle actuel du Président ou SG selon les clubs.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier complétude du dossier</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Notifier refus / validation</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D02</span>Enregistrer un paiement de cotisation</td>
+      <td class="desc-cell">Le Trésorier saisit les paiements (espèces ou Mobile Money), émet les reçus. Tous clubs actuellement sur papier — le système numérise ce flux.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Générer reçu de paiement</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Suspendre accès membre impayé (Vigueur)</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D03</span>Gérer les licences fédérales</td>
+      <td class="desc-cell">SG (Vigueur, Gomido) ou Président (MSA). Gomido : via febefoot connect (plateforme FBF numérique). Suivi des validations et expirantes.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Transmettre dossier à la fédération</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Alerter licence proche expiration</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D04</span>Créer / gérer une équipe</td>
+      <td class="desc-cell">Vigueur : Président. Gomido : Président + SG. MSA : Entraîneur. Définit catégorie, effectif min/max (18–25 chez Vigueur, 18–32 chez Gomido).</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Définir effectif min / max</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D05</span>Inscrire le club à une compétition</td>
+      <td class="desc-cell">Gomido : cotisation annuelle à la FBF en début de saison. MSA : bureau décide en début de saison. Fourniture des documents requis par la fédération.</td>
+      <td class="src-cell"><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier conformité documents</div>
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Fédération valide inscription</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D06</span>Produire la liste officielle de match</td>
+      <td class="desc-cell">Chez Gomido, c'est le SG qui produit la liste avec les numéros de licence après sélection par le coach. Soumise à l'arbitre avant match.</td>
+      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier licences des joueurs sélectionnés</div>
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Soumettre à l'arbitre</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D07</span>Gérer le budget du club</td>
+      <td class="desc-cell">Trésorier : recettes (cotisations, éventuels sponsors) et dépenses (déplacements, arbitrage, matériel). Actuellement tenu manuellement.</td>
+      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Générer bilan financier</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Exporter rapport PDF</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D08</span>Gérer l'inventaire des équipements</td>
+      <td class="desc-cell">Vigueur : inventaire périodique confié à l'entraîneur. Gomido : CM dédié sous supervision du Trésorier (TG). Le système centralise cet inventaire.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Déclencher commande réapprovisionnement</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D09</span>Gérer les sanctions disciplinaires</td>
+      <td class="desc-cell">Vigueur : suspension temporaire pour impayé. Gomido : suspension du joueur pour absences. Enregistre, notifie et suit les sanctions.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Enregistrer la sanction</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Notifier le joueur sanctionné</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D10</span>Réserver un terrain / une salle</td>
+      <td class="desc-cell">Vigueur : contrat permanent avec directeur du terrain. MSA : selon disponibilité du stade. Gomido : chronogramme prédéfini par gestionnaire.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier disponibilité terrain</div>
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Lier réservation à l'entraînement</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-D11</span>Consulter le tableau de bord global</td>
+      <td class="desc-cell">Vue synthétique : effectif actif, cotisations à jour, licences expirantes, prochains matchs, état du stock. Besoin central pour les dirigeants.</td>
+      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Exporter rapport</div>
+      </td>
+    </tr>
+
+    <!-- ══ RESPONSABLE MATÉRIEL ══ -->
+    <tr class="sec-row"><td colspan="5" class="sec4">📦 RESPONSABLE MATÉRIEL (CM)</td></tr>
+
+    <tr>
+      <td class="actor-cell" rowspan="4">
+        <div class="actor-block">
+          <div class="actor-pill ap4">📦 Resp. Matériel</div>
+          <div class="actor-sub">Acteur distinct identifié chez AS Gomido (CM). Supervisé par le Trésorier. Rôle assumé par l'entraîneur chez Vigueur et MSA.</div>
+        </div>
+      </td>
+      <td class="uc-cell"><span class="uc-num">UC-R01</span>Tenir l'inventaire du matériel</td>
+      <td class="desc-cell">Enregistre tous les équipements du club (ballons, maillots, cônes, protections…). Gomido : CM dédié qui remet l'inventaire au Trésorier.</td>
+      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour quantité & état</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler rupture de stock</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-R02</span>Valider / refuser un prêt d'équipement</td>
+      <td class="desc-cell">Examine la demande de prêt d'un joueur ou entraîneur. Vérifie disponibilité et état. Enregistre le prêt avec date de retour prévue.</td>
+      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier disponibilité équipement</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Refuser si équipement indisponible</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-R03</span>Enregistrer le retour d'équipement</td>
+      <td class="desc-cell">Réceptionne le matériel retourné, vérifie l'état, clôture le prêt. Signale tout dommage au Trésorier pour facturation éventuelle.</td>
+      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour inventaire</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler dommage au dirigeant</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-R04</span>Préparer le matériel pour un match / entraînement</td>
+      <td class="desc-cell">Sort et prépare le matériel nécessaire sur demande de l'entraîneur avant chaque séance ou rencontre officielle.</td>
+      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier stock disponible</div>
+      </td>
+    </tr>
+
+    <!-- ══ ARBITRE ══ -->
+    <tr class="sec-row"><td colspan="5" class="sec5">🟡 ARBITRE</td></tr>
+
+    <tr>
+      <td class="actor-cell" rowspan="4">
+        <div class="actor-block">
+          <div class="actor-pill ap5">🟡 Arbitre</div>
+          <div class="actor-sub">Désigné par la FBF (Vigueur, MSA) ou par les deux parties selon compétition (Gomido). Valide feuille de match et saisit résultat.</div>
+        </div>
+      </td>
+      <td class="uc-cell"><span class="uc-num">UC-A01</span>Valider la feuille de match</td>
+      <td class="desc-cell">Vérifie les licences des joueurs alignés avant coup d'envoi. Gomido : le SG soumet la liste avec numéros de licence à l'arbitre avant match.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier licences des joueurs</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Refuser joueur non conforme</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-A02</span>Saisir le résultat du match</td>
+      <td class="desc-cell">Enregistre score, buteurs, cartons. Déclenche mise à jour automatique du classement FBF. Remplace la feuille de match papier actuelle.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour classement</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler incident grave</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-A03</span>Gérer les cartons & suspensions</td>
+      <td class="desc-cell">Saisit les cartons par joueur. Le système cumule et calcule automatiquement les suspensions selon le barème FBF. Notifie le club.</td>
+      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Calculer suspension automatique</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Notifier le club concerné</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-A04</span>Consulter son calendrier de désignation</td>
+      <td class="desc-cell">Accède à la liste des matchs qui lui ont été attribués par la FBF avec dates, lieux et équipes. Vigueur et MSA confirment désignation par fédération.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Fédération gère les désignations</div>
+      </td>
+    </tr>
+
+    <!-- ══ FÉDÉRATION ══ -->
+    <tr class="sec-row"><td colspan="5" class="sec6">🏅 FÉDÉRATION (FBF / febefoot connect)</td></tr>
+
+    <tr>
+      <td class="actor-cell" rowspan="6">
+        <div class="actor-block">
+          <div class="actor-pill ap6">🏅 Fédération</div>
+          <div class="actor-sub">FBF pour les 3 clubs. AS Gomido utilise febefoot connect pour l'enrôlement des licences. Acteur externe au système.</div>
+        </div>
+      </td>
+      <td class="uc-cell"><span class="uc-num">UC-F01</span>Délivrer / valider une licence</td>
+      <td class="desc-cell">FBF valide les dossiers envoyés par le SG (Vigueur, Gomido) ou le Président (MSA). Gomido passe par febefoot connect. Vérification systématique avant compétition (Vigueur, Gomido).</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier dossier complet</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Rejeter dossier incomplet</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-F02</span>Valider l'inscription à un championnat</td>
+      <td class="desc-cell">Confirme participation après vérification des droits acquittés et conformité. Gomido : cotisation annuelle FBF = droit d'accès aux compétitions.</td>
+      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-m">🟢 MSA</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier droits d'inscription acquittés</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-F03</span>Publier le calendrier des compétitions</td>
+      <td class="desc-cell">Diffuse le calendrier officiel des matchs et tournois. Les clubs s'y réfèrent pour adapter leur planning d'entraînements (mentionné par MSA).</td>
+      <td class="src-cell"><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Clubs et arbitres consultent le calendrier</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-F04</span>Désigner les arbitres</td>
+      <td class="desc-cell">Vigueur et MSA : désignation uniquement par la fédération. Gomido : par les deux parties selon type de compétition. FBF reste acteur principal.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-ass">association</span>Notifier club et arbitre désigné</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-F05</span>Mettre à jour le classement général</td>
+      <td class="desc-cell">FBF met à jour le classement national après réception et validation des feuilles de match. Les 3 clubs confirment ce rôle de la fédération.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Intégrer résultats des matchs validés</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="uc-cell"><span class="uc-num">UC-F06</span>Contrôler les certificats médicaux</td>
+      <td class="desc-cell">Les 3 clubs confirment unanimement ce rôle de la FBF. Vérifie la validité des certificats médicaux des joueurs licenciés avant la saison.</td>
+      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
+      <td class="rel-cell">
+        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier certificat médical valide</div>
+        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Rejeter licence sans certificat</div>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+<!-- NOTE -->
+<div class="note">
+  <strong>Méthodologie :</strong> Les cas d'utilisation sont dérivés de 3 sources : les réponses terrain des clubs (🔴 Vigueur FC, 🟢 MSA, 🔵 AS Gomido), et l'expertise métier (🟣 Expert) pour combler les lacunes non couvertes mais nécessaires à la cohérence du système. Le <strong>Responsable Matériel (CM)</strong> est identifié comme acteur distinct grâce à AS Gomido — sa présence dans le diagramme de cas d'utilisation dépendra du périmètre retenu. La <strong>Fédération</strong> est un <em>acteur externe</em> : elle interagit avec le système mais n't en est pas l'opérateur.
+</div>
+
+</div>
+</body>
+</html>
