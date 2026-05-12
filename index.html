@@ -3,669 +3,1002 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Acteurs & Cas d'utilisation — Analyse terrain</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<title>Diagramme de Cas d'Utilisation — Club Sportif</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#F8F6F2;--bg2:#EDEBE5;--ink:#16120E;--ink2:#4A4440;--ink3:#908880;--line:#DDD8D0;
-  --c1:#B52A2A;--c1l:#FDECEA;
-  --c2:#1455A4;--c2l:#E3EEFF;
-  --c3:#1A5C22;--c3l:#E6F4E8;
-  --c4:#C45200;--c4l:#FFF0E3;
-  --c5:#5B2D8E;--c5l:#F2ECF9;
-  --c6:#0E6B5E;--c6l:#E0F5F2;
+  --bg:#0C0E13;
+  --panel:#13161E;
+  --border:#1E2330;
+  --ink:#E8ECF4;
+  --muted:#5A6070;
+  --dim:#2A2F3E;
+
+  --cJ:#E05252;   /* Joueur */
+  --cE:#4A90E2;   /* Entraîneur */
+  --cP:#52B788;   /* Président */
+  --cSG:#E8A430;  /* Secrétaire Général */
+  --cT:#A880F0;   /* Trésorier */
+  --cCM:#38BDF8;  /* Resp. Matériel */
+  --cA:#F4705A;   /* Arbitre */
+  --cF:#8892A4;   /* Fédération */
+  --sys:#1E2330;  /* système boundary */
 }
-body{background:var(--bg);color:var(--ink);font-family:'Instrument Sans',sans-serif;font-size:13px;line-height:1.55}
 
-.page{max-width:1320px;margin:0 auto;padding:44px 24px 80px}
+html,body{width:100%;min-height:100%;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',sans-serif;overflow-x:hidden}
 
-/* HEADER */
-.hdr{border-bottom:3px solid var(--ink);padding-bottom:18px;margin-bottom:28px}
-.eyebrow{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
-h1{font-family:'Syne',sans-serif;font-size:clamp(26px,4vw,46px);font-weight:800;line-height:1.05;letter-spacing:-1px}
-h1 em{font-style:normal;background:var(--ink);color:var(--bg);padding:0 8px}
-.sub{font-size:12.5px;color:var(--ink3);font-style:italic;margin-top:6px}
+/* ── TOP BAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.logo{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.logo span{color:var(--cE)}
+.title-bar{font-size:13px;font-weight:600;color:var(--ink)}
+.badge-uml{padding:3px 9px;background:rgba(74,144,226,0.15);border:1px solid rgba(74,144,226,0.3);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cE)}
 
-/* SOURCES */
-.sources{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 26px}
-.src-card{flex:1;min-width:200px;background:white;border:1.5px solid var(--line);border-radius:6px;padding:12px 14px;box-shadow:3px 3px 0 var(--line)}
-.src-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px}
-.src-detail{font-size:11px;color:var(--ink3)}
-.src-tag{display:inline-block;margin-top:4px;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;letter-spacing:.5px;background:var(--bg2);color:var(--ink2);border:1px solid var(--line)}
+.topbar-right{display:flex;gap:10px;align-items:center}
+.btn{padding:6px 14px;border-radius:5px;font-size:11.5px;font-weight:600;cursor:pointer;border:none;font-family:'Bricolage Grotesque',sans-serif;transition:.15s}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--dim);color:var(--ink)}
+.btn-primary{background:var(--cE);color:white}
+.btn-primary:hover{opacity:.85}
 
-/* COUNTERS */
-.counters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
-.cnt{background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:4px;text-align:center;min-width:90px}
-.cnt-n{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1;display:block}
-.cnt-l{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;opacity:.6;display:block;margin-top:2px}
+/* ── LAYOUT ── */
+.layout{display:flex;height:calc(100vh - 53px)}
 
-/* EVIDENCE BLOCK */
-.evidence-section{margin-bottom:28px;background:white;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:4px 4px 0 var(--line)}
-.ev-title{padding:10px 16px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;background:var(--bg2);border-bottom:1px solid var(--line);color:var(--ink2)}
-.ev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0}
-.ev-item{padding:12px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-.ev-item:last-child{border-right:none}
-.ev-q{font-size:10px;font-weight:600;color:var(--ink3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px}
-.ev-a{font-size:12px;color:var(--ink2)}
-.ev-tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;margin-right:3px;margin-bottom:2px;background:var(--bg2);border:1px solid var(--line);color:var(--ink2)}
+/* ── SIDEBAR ── */
+.sidebar{
+  width:220px;flex-shrink:0;
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  padding:18px 14px;
+  overflow-y:auto;
+}
+.sidebar-section{margin-bottom:22px}
+.sidebar-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-left:4px}
 
-/* MAIN TABLE */
-.wrap{border:2px solid var(--ink);border-radius:8px;overflow:hidden;box-shadow:6px 6px 0 rgba(0,0,0,0.12);margin-bottom:28px}
-table{width:100%;border-collapse:collapse;min-width:900px}
+.actor-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 8px;border-radius:6px;
+  cursor:pointer;transition:.12s;
+  margin-bottom:2px;
+}
+.actor-item:hover{background:rgba(255,255,255,.04)}
+.actor-item.active{background:rgba(255,255,255,.06)}
 
-thead tr{background:var(--ink)}
-thead th{padding:12px 13px;font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--bg);text-align:left;border-right:1px solid rgba(255,255,255,.1)}
-thead th:last-child{border-right:none}
+.actor-icon-wrap{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;border:1.5px solid;
+}
+.actor-name{font-size:12px;font-weight:500;line-height:1.2}
+.actor-count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
 
-.sec-row td{padding:8px 14px;font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;border-bottom:1px solid rgba(0,0,0,.1)}
+.rel-legend{margin-top:4px}
+.rel-item{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.rel-line{width:32px;height:2px;flex-shrink:0}
+.rel-dashed{border-top:2px dashed;width:32px}
+.rel-label{font-size:11px;color:var(--muted)}
 
-td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
-tbody tr:hover{background:rgba(0,0,0,.018)}
-tbody tr:last-child td{border-bottom:none}
+/* ── CANVAS ── */
+.canvas-wrap{
+  flex:1;overflow:auto;
+  background:var(--bg);
+  position:relative;
+}
+.canvas-wrap::-webkit-scrollbar{width:6px;height:6px}
+.canvas-wrap::-webkit-scrollbar-track{background:var(--bg)}
+.canvas-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-td.actor-cell{border-right:2px solid var(--line);white-space:nowrap;width:1%}
-.actor-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px 5px 8px;border-radius:20px;font-size:11.5px;font-weight:600;border:1.5px solid;white-space:nowrap}
-.actor-sub{font-size:10.5px;color:var(--ink3);font-style:italic;max-width:155px;white-space:normal;line-height:1.3;margin-top:5px}
-.actor-block{display:flex;flex-direction:column}
+svg{display:block}
 
-td.uc-cell{border-right:1px solid var(--line);font-weight:500;font-size:12.5px;min-width:190px}
-.uc-num{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--ink3);letter-spacing:1px;display:block;margin-bottom:2px}
+/* ── TOOLTIP ── */
+.tooltip{
+  position:fixed;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 14px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s;
+  z-index:200;
+  max-width:240px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+}
+.tooltip.show{opacity:1}
+.tt-actor{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.tt-uc{font-size:13px;font-weight:600;margin-bottom:4px}
+.tt-desc{font-size:11.5px;color:var(--muted);line-height:1.5}
 
-td.desc-cell{border-right:1px solid var(--line);font-size:12px;color:var(--ink2);min-width:230px}
-
-td.src-cell{border-right:1px solid var(--line);min-width:130px}
-.src-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;margin-bottom:3px;border:1px solid}
-.s-v{background:#FFF7E0;color:#92600A;border-color:#F5CC68}
-.s-m{background:#E8F5E9;color:#1B5E20;border-color:#81C784}
-.s-g{background:#E3EEFF;color:#0D3B8C;border-color:#90B4F5}
-.s-exp{background:#F3E5F5;color:#4A148C;border-color:#CE93D8}
-
-td.rel-cell{min-width:170px}
-.rel-entry{display:flex;align-items:flex-start;gap:5px;margin-bottom:4px;font-size:11px;color:var(--ink2);line-height:1.35}
-.rel-entry:last-child{margin-bottom:0}
-.rp{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;font-style:italic;flex-shrink:0}
-.rp-inc{background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7}
-.rp-ext{background:#FFF8E1;color:#C45200;border:1px solid #FFB74D}
-.rp-ass{background:#E3EEFF;color:#1455A4;border:1px solid #90B4F5}
-
-/* actor colors */
-.ap1{color:var(--c1);border-color:var(--c1);background:var(--c1l)}
-.ap2{color:var(--c2);border-color:var(--c2);background:var(--c2l)}
-.ap3{color:var(--c3);border-color:var(--c3);background:var(--c3l)}
-.ap4{color:var(--c4);border-color:var(--c4);background:var(--c4l)}
-.ap5{color:var(--c5);border-color:var(--c5);background:var(--c5l)}
-.ap6{color:var(--c6);border-color:var(--c6);background:var(--c6l)}
-.sec1{background:var(--c1l);color:var(--c1)}
-.sec2{background:var(--c2l);color:var(--c2)}
-.sec3{background:var(--c3l);color:var(--c3)}
-.sec4{background:var(--c4l);color:var(--c4)}
-.sec5{background:var(--c5l);color:var(--c5)}
-.sec6{background:var(--c6l);color:var(--c6)}
-
-/* FOOTER */
-.note{padding:14px 18px;background:white;border-left:4px solid var(--ink);border-radius:0 6px 6px 0;font-size:11.5px;color:var(--ink3);font-style:italic;line-height:1.6;border:1.5px solid var(--line);border-left:4px solid var(--ink)}
-
-.legend{display:flex;flex-wrap:wrap;gap:8px 18px;padding:12px 16px;background:white;border:1.5px solid var(--line);border-radius:6px;margin-bottom:16px}
-.leg{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink2)}
-.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-
-@media(max-width:700px){.page{padding:20px 12px 40px}h1{font-size:22px}.ev-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="page">
 
-<!-- HEADER -->
-<div class="hdr">
-  <div class="eyebrow">Analyse terrain · Bénin · 3 clubs enquêtés</div>
-  <h1>ACTEURS & <em>CAS D'UTILISATION</em></h1>
-  <div class="sub">Déterminés à partir des réponses collectées sur le terrain — croisées avec l'expertise métier</div>
-</div>
-
-<!-- SOURCES CLUBS -->
-<div class="sources">
-  <div class="src-card">
-    <div class="src-name">🔴 VIGUEUR FC</div>
-    <div class="src-detail">Fondé en 2006 · FBF · Football</div>
-    <div class="src-detail">12 membres actifs · U13 U15 U17 Seniors</div>
-    <div><span class="src-tag">Enquêteur : SODJI Augusto</span></div>
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo">UML <span>·</span> DCU</div>
+    <div class="title-bar">Diagramme de Cas d'Utilisation — Gestion Club Sportif · Bénin</div>
+    <span class="badge-uml">«use case diagram»</span>
   </div>
-  <div class="src-card">
-    <div class="src-name">🟢 MAHUDONU SPORTS-ARTS (MSA)</div>
-    <div class="src-detail">Fondé en 2017 · Multi-sport</div>
-    <div class="src-detail">150 membres · Football, Basketball, Volley, Athlétisme</div>
-    <div><span class="src-tag">Enquêteur : Dochanou Yanees</span></div>
-  </div>
-  <div class="src-card">
-    <div class="src-name">🔵 AS GOMIDO</div>
-    <div class="src-detail">Fondé en 2020 · FBF · Football</div>
-    <div class="src-detail">U20, U17 Féminin, Seniors · Plateforme febefoot connect</div>
-    <div><span class="src-tag">Enquêteur : Bonaventure SOSSOUKPO</span></div>
+  <div class="topbar-right">
+    <button class="btn btn-ghost" onclick="resetZoom()">Reset zoom</button>
+    <button class="btn btn-primary" onclick="downloadSVG()">↓ Exporter SVG</button>
   </div>
 </div>
 
-<!-- COUNTERS -->
-<div class="counters">
-  <div class="cnt"><span class="cnt-n">6</span><span class="cnt-l">Acteurs</span></div>
-  <div class="cnt"><span class="cnt-n">42</span><span class="cnt-l">Cas d'utilisation</span></div>
-  <div class="cnt"><span class="cnt-n">3</span><span class="cnt-l">Clubs sources</span></div>
-  <div class="cnt"><span class="cnt-n">39</span><span class="cnt-l">Questions analysées</span></div>
-</div>
+<div class="layout">
 
-<!-- PREUVES TERRAIN -->
-<div class="evidence-section">
-  <div class="ev-title">📋 Faits saillants extraits des réponses terrain</div>
-  <div class="ev-grid">
-    <div class="ev-item">
-      <div class="ev-q">Paiement cotisation</div>
-      <div class="ev-a"><span class="ev-tag">Espèces + reçu papier</span><span class="ev-tag">Mobile Money</span> — unanime chez les 3 clubs</div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Acteurs (8)</div>
+      <div class="actor-item" onclick="highlightActor('J')">
+        <div class="actor-icon-wrap" style="color:var(--cJ);border-color:var(--cJ);background:rgba(224,82,82,.1)">👤</div>
+        <div>
+          <div class="actor-name">Joueur</div>
+        </div>
+        <div class="actor-count">7</div>
+      </div>
+      <div class="actor-item" onclick="highlightActor('E')">
+        <div class="actor-icon-wrap" style="color:var(--cE);border-color:var(--cE);background:rgba(74,144,226,.1)">🏋️</div>
+        <div><div class="actor-name">Entraîneur</div></div>
+        <div class="actor-count">8</div>
+      </div>
+      <div class="actor-item" onclick="highlightActor('P')">
+        <div class="actor-icon-wrap" style="color:var(--cP);border-color:var(--cP);background:rgba(82,183,136,.1)">🏅</div>
+        <div><div class="actor-name">Président</div></div>
+        <div class="actor-count">5</div>
+      </div>
+      <div class="actor-item" onclick="highlightActor('SG')">
+        <div class="actor-icon-wrap" style="color:var(--cSG);border-color:var(--cSG);background:rgba(232,164,48,.1)">📋</div>
+        <div><div class="actor-name">Secrétaire Gén.</div></div>
+        <div class="actor-count">5</div>
+      </div>
+      <div class="actor-item" onclick="highlightActor('T')">
+        <div class="actor-icon-wrap" style="color:var(--cT);border-color:var(--cT);background:rgba(168,128,240,.1)">💰</div>
+        <div><div class="actor-name">Trésorier</div></div>
+        <div class="actor-count">5</div>
+      </div>
+      <div class="actor-item" onclick="highlightActor('CM')">
+        <div class="actor-icon-wrap" style="color:var(--cCM);border-color:var(--cCM);background:rgba(56,189,248,.1)">📦</div>
+        <div><div class="actor-name">Resp. Matériel</div></div>
+        <div class="actor-count">4</div>
+      </div>
+      <div class="actor-item" onclick="highlightActor('A')">
+        <div class="actor-icon-wrap" style="color:var(--cA);border-color:var(--cA);background:rgba(244,112,90,.1)">🟡</div>
+        <div><div class="actor-name">Arbitre</div></div>
+        <div class="actor-count">4</div>
+      </div>
+      <div class="actor-item" onclick="highlightActor('F')">
+        <div class="actor-icon-wrap" style="color:var(--cF);border-color:var(--cF);background:rgba(136,146,164,.1)">🏛️</div>
+        <div><div class="actor-name">Fédération</div></div>
+        <div class="actor-count">6</div>
+      </div>
     </div>
-    <div class="ev-item">
-      <div class="ev-q">Inscription</div>
-      <div class="ev-a"><span class="ev-tag">Formulaire papier</span> uniquement — aucune appli actuelle</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Relations UML</div>
+      <div class="rel-legend">
+        <div class="rel-item">
+          <div style="width:32px;height:2px;background:#4A90E2"></div>
+          <div class="rel-label">Association</div>
+        </div>
+        <div class="rel-item">
+          <div style="width:32px;border-top:2px dashed #52B788"></div>
+          <div class="rel-label">«include»</div>
+        </div>
+        <div class="rel-item">
+          <div style="width:32px;border-top:2px dashed #E8A430"></div>
+          <div class="rel-label">«extend»</div>
+        </div>
+        <div class="rel-item">
+          <div style="width:32px;border-top:2px dashed #A880F0"></div>
+          <div class="rel-label">Généralisation</div>
+        </div>
+      </div>
     </div>
-    <div class="ev-item">
-      <div class="ev-q">Gestion licences</div>
-      <div class="ev-a">Plateforme <span class="ev-tag">febefoot connect</span> (AS GOMIDO) · manuelle pour les autres</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.7">
+        Scroll pour naviguer<br>
+        Cliquer acteur = filtrer<br>
+        Survol UC = détails<br>
+        Clic UC = description
+      </div>
     </div>
-    <div class="ev-item">
-      <div class="ev-q">Présence aux séances</div>
-      <div class="ev-a"><span class="ev-tag">Feuille papier</span> (Vigueur) · <span class="ev-tag">Cahier entraîneur</span> (MSA) · <span class="ev-tag">Aucun suivi</span> (Gomido)</div>
-    </div>
-    <div class="ev-item">
-      <div class="ev-q">Cotisation obligatoire ?</div>
-      <div class="ev-a">Vigueur FC : <span class="ev-tag">Oui (entr. + compét.)</span> · MSA & Gomido : <span class="ev-tag">Non, facultative</span></div>
-    </div>
-    <div class="ev-item">
-      <div class="ev-q">Responsable matériel</div>
-      <div class="ev-a">Gomido : <span class="ev-tag">CM dédié</span> · Vigueur & MSA : <span class="ev-tag">Entraîneur</span></div>
-    </div>
-    <div class="ev-item">
-      <div class="ev-q">Communication programme</div>
-      <div class="ev-a"><span class="ev-tag">WhatsApp / SMS</span> · <span class="ev-tag">Réunion physique</span> — 0 outil digital interne</div>
-    </div>
-    <div class="ev-item">
-      <div class="ev-q">Arbitres</div>
-      <div class="ev-a">2 clubs → fédération · Gomido → les deux selon type de compétition</div>
-    </div>
-    <div class="ev-item">
-      <div class="ev-q">Terrain</div>
-      <div class="ev-a">Vigueur : <span class="ev-tag">Contrat avec gestionnaire</span> · MSA : <span class="ev-tag">Selon disponibilité stade</span></div>
-    </div>
+  </div>
+
+  <!-- CANVAS -->
+  <div class="canvas-wrap" id="canvasWrap">
+    <svg id="mainSvg" width="2400" height="1800" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Arrow markers -->
+        <marker id="arr-inc" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0,10 3.5,0 7" fill="#52B788" opacity="0.8"/>
+        </marker>
+        <marker id="arr-ext" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0,10 3.5,0 7" fill="#E8A430" opacity="0.8"/>
+        </marker>
+        <marker id="arr-open" markerWidth="12" markerHeight="8" refX="10" refY="4" orient="auto">
+          <polyline points="0,0 10,4 0,8" fill="none" stroke="#4A90E2" stroke-width="1.5" opacity="0.7"/>
+        </marker>
+        <marker id="arr-gen" markerWidth="12" markerHeight="10" refX="1" refY="5" orient="auto">
+          <polygon points="0 5,12 0,12 10" fill="none" stroke="#A880F0" stroke-width="1.5"/>
+        </marker>
+        <!-- Filters -->
+        <filter id="glow-J"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glow-E"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.4)"/></filter>
+      </defs>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- SYSTEM BOUNDARY -->
+      <!-- ═══════════════════════════════════════════ -->
+      <rect x="370" y="40" width="1640" height="1720" rx="12"
+        fill="none" stroke="#1E2330" stroke-width="2" stroke-dasharray="8,4"/>
+      <text x="390" y="30" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700"
+        fill="#2A3040" letter-spacing="2">SYSTÈME — Application de Gestion du Club Sportif</text>
+
+      <!-- ═══════ SUBSYSTEM ZONES ═══════ -->
+      <!-- Zone Membres -->
+      <rect x="390" y="60" width="380" height="460" rx="8" fill="rgba(224,82,82,0.03)" stroke="rgba(224,82,82,0.12)" stroke-width="1"/>
+      <text x="405" y="85" font-family="JetBrains Mono,monospace" font-size="9" fill="#E05252" letter-spacing="2" opacity="0.7">ADHÉSION &amp; MEMBRES</text>
+
+      <!-- Zone Entraînements -->
+      <rect x="390" y="540" width="380" height="420" rx="8" fill="rgba(74,144,226,0.03)" stroke="rgba(74,144,226,0.12)" stroke-width="1"/>
+      <text x="405" y="562" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A90E2" letter-spacing="2" opacity="0.7">ENTRAÎNEMENTS</text>
+
+      <!-- Zone Compétitions -->
+      <rect x="800" y="60" width="400" height="460" rx="8" fill="rgba(82,183,136,0.03)" stroke="rgba(82,183,136,0.12)" stroke-width="1"/>
+      <text x="815" y="85" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" letter-spacing="2" opacity="0.7">COMPÉTITIONS &amp; LICENCES</text>
+
+      <!-- Zone Matériel -->
+      <rect x="390" y="980" width="380" height="360" rx="8" fill="rgba(56,189,248,0.03)" stroke="rgba(56,189,248,0.12)" stroke-width="1"/>
+      <text x="405" y="1002" font-family="JetBrains Mono,monospace" font-size="9" fill="#38BDF8" letter-spacing="2" opacity="0.7">MATÉRIEL &amp; ÉQUIPEMENTS</text>
+
+      <!-- Zone Finances -->
+      <rect x="800" y="540" width="400" height="420" rx="8" fill="rgba(168,128,240,0.03)" stroke="rgba(168,128,240,0.12)" stroke-width="1"/>
+      <text x="815" y="562" font-family="JetBrains Mono,monospace" font-size="9" fill="#A880F0" letter-spacing="2" opacity="0.7">FINANCES &amp; COTISATIONS</text>
+
+      <!-- Zone Résultats/Stats -->
+      <rect x="1230" y="60" width="360" height="900" rx="8" fill="rgba(244,112,90,0.03)" stroke="rgba(244,112,90,0.12)" stroke-width="1"/>
+      <text x="1245" y="85" font-family="JetBrains Mono,monospace" font-size="9" fill="#F4705A" letter-spacing="2" opacity="0.7">RÉSULTATS &amp; STATISTIQUES</text>
+
+      <!-- Zone Administration -->
+      <rect x="800" y="980" width="800" height="360" rx="8" fill="rgba(136,146,164,0.03)" stroke="rgba(136,146,164,0.12)" stroke-width="1"/>
+      <text x="815" y="1002" font-family="JetBrains Mono,monospace" font-size="9" fill="#8892A4" letter-spacing="2" opacity="0.7">ADMINISTRATION SYSTÈME</text>
+
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- USE CASES — ZONE ADHÉSION & MEMBRES -->
+      <!-- ═══════════════════════════════════════════ -->
+
+      <!-- UC: S'inscrire au club -->
+      <g class="uc-node" data-actor="J,P,SG" data-id="J01"
+         data-desc="Formulaire d'adhésion. Fournit CNI, photo, autorisation parentale si mineur. 100% papier actuellement."
+         data-title="S'inscrire au club">
+        <ellipse cx="580" cy="130" rx="110" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
+        <text x="580" y="135" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">S'inscrire au club</text>
+      </g>
+
+      <!-- UC: Fournir pièces justificatives (include) -->
+      <g class="uc-node" data-actor="J" data-id="J01a">
+        <ellipse cx="580" cy="210" rx="125" ry="24" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="580" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Fournir pièces justificatives</text>
+      </g>
+      <!-- include arrow J01 -> J01a -->
+      <line x1="580" y1="158" x2="580" y2="186" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="590" y="175" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+
+      <!-- UC: Autorisation parentale (extend) -->
+      <g class="uc-node" data-actor="J" data-id="J01b">
+        <ellipse cx="430" cy="210" rx="118" ry="24" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="430" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Autorisation parentale</text>
+      </g>
+      <line x1="540" y1="143" x2="440" y2="186" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
+      <text x="458" y="158" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
+
+      <!-- UC: Valider inscription -->
+      <g class="uc-node" data-actor="P,SG" data-id="P01"
+         data-desc="Président ou SG examine et approuve le dossier. Crée le compte officiel du membre."
+         data-title="Valider l'inscription d'un membre">
+        <ellipse cx="580" cy="295" rx="125" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
+        <text x="580" y="292" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Valider l'inscription</text>
+        <text x="580" y="307" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">d'un membre</text>
+      </g>
+
+      <!-- UC: Consulter son profil -->
+      <g class="uc-node" data-actor="J" data-id="J04"
+         data-desc="Accès au statut de licence, cotisation, équipe, sanctions actives, historique de présences."
+         data-title="Consulter son profil & statut">
+        <ellipse cx="580" cy="390" rx="125" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
+        <text x="580" y="387" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter son profil</text>
+        <text x="580" y="402" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">&amp; statut</text>
+      </g>
+
+      <!-- UC: Gérer les sanctions disciplinaires -->
+      <g class="uc-node" data-actor="P,SG" data-id="P04"
+         data-desc="Avertissements, suspensions internes pour impayés (Vigueur) ou manquements disciplinaires."
+         data-title="Gérer les sanctions disciplinaires">
+        <ellipse cx="580" cy="480" rx="125" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
+        <text x="580" y="477" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer les sanctions</text>
+        <text x="580" y="492" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">disciplinaires</text>
+      </g>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- USE CASES — ZONE ENTRAÎNEMENTS -->
+      <!-- ═══════════════════════════════════════════ -->
+
+      <!-- UC: Planifier un entraînement -->
+      <g class="uc-node" data-actor="E" data-id="E01"
+         data-desc="Date, heure, lieu, type de séance. 3x/semaine minimum. Planning fixe ou variable selon compétitions."
+         data-title="Planifier un entraînement">
+        <ellipse cx="580" cy="600" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
+        <text x="580" y="597" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Planifier un</text>
+        <text x="580" y="612" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">entraînement</text>
+      </g>
+      <!-- include: Réserver terrain -->
+      <g class="uc-node" data-actor="E" data-id="E01a">
+        <ellipse cx="440" cy="680" rx="100" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="440" y="685" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Réserver le terrain</text>
+      </g>
+      <line x1="547" y1="621" x2="472" y2="658" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="478" y="636" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+
+      <!-- UC: Annuler/reporter -->
+      <g class="uc-node" data-actor="E" data-id="E02"
+         data-desc="Annulation suite à indisponibilité du terrain. Notifie automatiquement les joueurs."
+         data-title="Annuler / reporter un entraînement">
+        <ellipse cx="580" cy="700" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
+        <text x="580" y="697" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Annuler / reporter</text>
+        <text x="580" y="712" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">un entraînement</text>
+      </g>
+
+      <!-- UC: Enregistrer présences -->
+      <g class="uc-node" data-actor="E" data-id="E03"
+         data-desc="Présents/absents. Vigueur: feuille papier. MSA: cahier. Gomido: aucun suivi actuel. Absences → suspension."
+         data-title="Enregistrer les présences">
+        <ellipse cx="580" cy="800" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
+        <text x="580" y="797" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Enregistrer</text>
+        <text x="580" y="812" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">les présences</text>
+      </g>
+      <!-- extend: Alerter absence -->
+      <g class="uc-node" data-actor="E" data-id="E03a">
+        <ellipse cx="430" cy="870" rx="110" ry="22" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="430" y="875" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Alerter absence répétée</text>
+      </g>
+      <line x1="549" y1="823" x2="484" y2="848" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
+      <text x="488" y="833" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
+
+      <!-- UC: Confirmer présence (joueur) -->
+      <g class="uc-node" data-actor="J" data-id="J03"
+         data-desc="Joueur signale sa disponibilité. Système vérifie cotisation (Vigueur) et appartenance à l'équipe."
+         data-title="Confirmer sa présence à un entraînement">
+        <ellipse cx="580" cy="920" rx="125" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
+        <text x="580" y="917" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Confirmer sa présence</text>
+        <text x="580" y="932" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">à un entraînement</text>
+      </g>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- USE CASES — ZONE MATÉRIEL -->
+      <!-- ═══════════════════════════════════════════ -->
+
+      <!-- UC: Tenir inventaire -->
+      <g class="uc-node" data-actor="CM,E" data-id="CM01"
+         data-desc="Enregistre équipements, état, emplacement. CM chez Gomido, entraîneur chez Vigueur & MSA."
+         data-title="Tenir l'inventaire du matériel">
+        <ellipse cx="580" cy="1050" rx="125" ry="28" fill="#13161E" stroke="#38BDF8" stroke-width="1.5"/>
+        <text x="580" y="1047" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Tenir l'inventaire</text>
+        <text x="580" y="1062" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">du matériel</text>
+      </g>
+
+      <!-- UC: Emprunter équipement -->
+      <g class="uc-node" data-actor="J,CM,E" data-id="J06"
+         data-desc="Demande de prêt de matériel. CM chez Gomido, entraîneur chez Vigueur & MSA. Système trace le prêt."
+         data-title="Emprunter un équipement">
+        <ellipse cx="580" cy="1150" rx="125" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
+        <text x="580" y="1147" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Emprunter un</text>
+        <text x="580" y="1162" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">équipement</text>
+      </g>
+      <!-- include: Vérifier dispo -->
+      <g class="uc-node" data-actor="CM" data-id="CM02a">
+        <ellipse cx="430" cy="1215" rx="105" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="430" y="1220" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Vérifier disponibilité</text>
+      </g>
+      <line x1="551" y1="1172" x2="486" y2="1193" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="494" y="1182" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+
+      <!-- UC: Retour équipement -->
+      <g class="uc-node" data-actor="CM,E" data-id="CM03"
+         data-desc="Réception, contrôle état, clôture du prêt. Signale tout dommage au Trésorier."
+         data-title="Enregistrer le retour d'équipement">
+        <ellipse cx="580" cy="1280" rx="125" ry="28" fill="#13161E" stroke="#38BDF8" stroke-width="1.5"/>
+        <text x="580" y="1277" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Enregistrer le retour</text>
+        <text x="580" y="1292" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">d'équipement</text>
+      </g>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- USE CASES — ZONE COMPÉTITIONS & LICENCES -->
+      <!-- ═══════════════════════════════════════════ -->
+
+      <!-- UC: Gérer licences fédérales -->
+      <g class="uc-node" data-actor="SG,P" data-id="SG02"
+         data-desc="SG (Vigueur, Gomido) ou Président (MSA). Gomido: via febefoot connect. Suivi renouvellements."
+         data-title="Gérer les licences fédérales">
+        <ellipse cx="1000" cy="130" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
+        <text x="1000" y="127" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer les licences</text>
+        <text x="1000" y="142" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">fédérales</text>
+      </g>
+      <!-- include: Soumettre dossier -->
+      <g class="uc-node" data-actor="SG" data-id="SG02a">
+        <ellipse cx="860" cy="210" rx="110" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="860" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Soumettre dossier FBF</text>
+      </g>
+      <line x1="958" y1="153" x2="903" y2="188" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="910" y="167" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+
+      <!-- extend: Alerter licence -->
+      <g class="uc-node" data-actor="SG" data-id="SG02b">
+        <ellipse cx="1100" cy="210" rx="115" ry="22" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="1100" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Alerter licence expirante</text>
+      </g>
+      <line x1="1048" y1="153" x2="1075" y2="188" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
+      <text x="1050" y="167" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
+
+      <!-- UC: Inscrire club à compétition -->
+      <g class="uc-node" data-actor="SG,P" data-id="SG04"
+         data-desc="Rassemble et soumet documents FBF. Gomido: cotisation annuelle FBF = clé d'accès aux compétitions."
+         data-title="Inscrire le club à une compétition">
+        <ellipse cx="1000" cy="295" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
+        <text x="1000" y="292" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Inscrire le club</text>
+        <text x="1000" y="307" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">à une compétition</text>
+      </g>
+
+      <!-- UC: Sélectionner joueurs pour match -->
+      <g class="uc-node" data-actor="E" data-id="E04"
+         data-desc="Selon performance (Vigueur), décision technique (MSA), sélectionneur (Gomido). Vérifie éligibilité."
+         data-title="Sélectionner les joueurs pour un match">
+        <ellipse cx="1000" cy="390" rx="130" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
+        <text x="1000" y="387" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Sélectionner joueurs</text>
+        <text x="1000" y="402" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">pour un match</text>
+      </g>
+      <!-- include: Vérifier éligibilité -->
+      <g class="uc-node" data-actor="E" data-id="E04a">
+        <ellipse cx="875" cy="460" rx="110" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="875" y="465" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Vérifier éligibilité joueur</text>
+      </g>
+      <line x1="960" y1="413" x2="920" y2="438" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="920" y="424" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+
+      <!-- UC: Produire liste officielle match -->
+      <g class="uc-node" data-actor="SG" data-id="SG03"
+         data-desc="Après sélection par le coach, le SG produit la liste avec numéros de licence. Soumise à l'arbitre."
+         data-title="Produire la liste officielle de match">
+        <ellipse cx="1000" cy="490" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
+        <text x="1000" y="487" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Produire liste officielle</text>
+        <text x="1000" y="502" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de match</text>
+      </g>
+      <!-- include: Vérifier licences liste -->
+      <g class="uc-node" data-actor="SG" data-id="SG03a">
+        <ellipse cx="1130" cy="460" rx="115" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="1130" y="465" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Vérifier licences sélectionnés</text>
+      </g>
+      <line x1="1048" y1="476" x2="1082" y2="455" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="1052" y="463" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- USE CASES — ZONE FINANCES -->
+      <!-- ═══════════════════════════════════════════ -->
+
+      <!-- UC: Enregistrer paiement cotisation -->
+      <g class="uc-node" data-actor="T,J" data-id="T01"
+         data-desc="Trésorier saisit versements (espèces ou Mobile Money), émet reçus. 100% papier actuellement."
+         data-title="Enregistrer un paiement de cotisation">
+        <ellipse cx="1000" cy="600" rx="130" ry="28" fill="#13161E" stroke="#A880F0" stroke-width="1.5"/>
+        <text x="1000" y="597" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Enregistrer paiement</text>
+        <text x="1000" y="612" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de cotisation</text>
+      </g>
+      <!-- include: Générer reçu -->
+      <g class="uc-node" data-actor="T" data-id="T01a">
+        <ellipse cx="860" cy="680" rx="100" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="860" y="685" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Générer reçu paiement</text>
+      </g>
+      <line x1="958" y1="622" x2="905" y2="658" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="912" y="637" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+
+      <!-- UC: Suivre les impayés -->
+      <g class="uc-node" data-actor="T" data-id="T02"
+         data-desc="Identifie membres en retard. Vigueur: suspension entraînements. MSA/Gomido: aucune conséquence actuelle."
+         data-title="Suivre les impayés">
+        <ellipse cx="1000" cy="720" rx="130" ry="28" fill="#13161E" stroke="#A880F0" stroke-width="1.5"/>
+        <text x="1000" y="725" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Suivre les impayés</text>
+      </g>
+      <!-- extend: Suspendre accès -->
+      <g class="uc-node" data-actor="T" data-id="T02a">
+        <ellipse cx="1130" cy="680" rx="110" ry="22" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="1130" y="685" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Suspendre accès impayé</text>
+      </g>
+      <line x1="1048" y1="702" x2="1096" y2="680" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
+      <text x="1058" y="688" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
+
+      <!-- UC: Gérer budget -->
+      <g class="uc-node" data-actor="T" data-id="T03"
+         data-desc="Recettes (cotisations, subventions) et dépenses (matériel, déplacements, arbitrage, inscriptions)."
+         data-title="Gérer le budget du club">
+        <ellipse cx="1000" cy="800" rx="130" ry="28" fill="#13161E" stroke="#A880F0" stroke-width="1.5"/>
+        <text x="1000" y="797" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer le budget</text>
+        <text x="1000" y="812" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">du club</text>
+      </g>
+
+      <!-- UC: Commander équipements -->
+      <g class="uc-node" data-actor="T,CM" data-id="T05"
+         data-desc="Commande matériel auprès fournisseurs. Réception et enregistrement en inventaire."
+         data-title="Commander des équipements">
+        <ellipse cx="1000" cy="900" rx="130" ry="28" fill="#13161E" stroke="#A880F0" stroke-width="1.5"/>
+        <text x="1000" y="897" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Commander des</text>
+        <text x="1000" y="912" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">équipements</text>
+      </g>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- USE CASES — ZONE RÉSULTATS & STATS -->
+      <!-- ═══════════════════════════════════════════ -->
+
+      <!-- UC: Valider feuille de match (Arbitre) -->
+      <g class="uc-node" data-actor="A" data-id="A01"
+         data-desc="Vérifie licences avant coup d'envoi. SG soumet liste avec numéros de licence à l'arbitre."
+         data-title="Valider la feuille de match">
+        <ellipse cx="1400" cy="130" rx="125" ry="28" fill="#13161E" stroke="#F4705A" stroke-width="1.5"/>
+        <text x="1400" y="127" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Valider la feuille</text>
+        <text x="1400" y="142" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de match</text>
+      </g>
+      <!-- include: Vérifier licences -->
+      <g class="uc-node" data-actor="A" data-id="A01a">
+        <ellipse cx="1290" cy="210" rx="100" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="1290" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Vérifier licences joueurs</text>
+      </g>
+      <line x1="1367" y1="153" x2="1325" y2="188" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="1320" y="167" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+      <!-- extend: Refuser joueur -->
+      <g class="uc-node" data-actor="A" data-id="A01b">
+        <ellipse cx="1500" cy="210" rx="100" ry="22" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="1500" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Refuser joueur non conforme</text>
+      </g>
+      <line x1="1435" y1="153" x2="1468" y2="188" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
+      <text x="1436" y="167" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
+
+      <!-- UC: Saisir résultat match -->
+      <g class="uc-node" data-actor="A,E" data-id="A02"
+         data-desc="Score final, buteurs, cartons. Déclenche mise à jour classement FBF. Remplace feuille papier."
+         data-title="Saisir le résultat du match">
+        <ellipse cx="1400" cy="310" rx="125" ry="28" fill="#13161E" stroke="#F4705A" stroke-width="1.5"/>
+        <text x="1400" y="307" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Saisir le résultat</text>
+        <text x="1400" y="322" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">du match</text>
+      </g>
+      <!-- include: Mettre à jour classement -->
+      <g class="uc-node" data-actor="A" data-id="A02a">
+        <ellipse cx="1400" cy="395" rx="115" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="1400" y="400" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Mettre à jour classement</text>
+      </g>
+      <line x1="1400" y1="338" x2="1400" y2="373" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="1410" y="358" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+
+      <!-- UC: Gérer cartons/suspensions -->
+      <g class="uc-node" data-actor="A" data-id="A03"
+         data-desc="Cartons distribués → calcul automatique suspensions selon barème FBF → notification SG."
+         data-title="Gérer cartons & suspensions">
+        <ellipse cx="1400" cy="490" rx="125" ry="28" fill="#13161E" stroke="#F4705A" stroke-width="1.5"/>
+        <text x="1400" y="487" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer cartons</text>
+        <text x="1400" y="502" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">&amp; suspensions</text>
+      </g>
+      <!-- include: Calcul suspension -->
+      <g class="uc-node" data-actor="A" data-id="A03a">
+        <ellipse cx="1520" cy="570" rx="105" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
+        <text x="1520" y="575" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Calculer suspension auto</text>
+      </g>
+      <line x1="1445" y1="514" x2="1488" y2="548" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
+      <text x="1448" y="530" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
+
+      <!-- UC: Saisir statistiques match -->
+      <g class="uc-node" data-actor="E" data-id="E06"
+         data-desc="Buts, cartons, présences après chaque rencontre. Alimente profils joueurs et décisions de sélection."
+         data-title="Saisir les statistiques de match">
+        <ellipse cx="1400" cy="650" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
+        <text x="1400" y="647" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Saisir statistiques</text>
+        <text x="1400" y="662" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de match</text>
+      </g>
+
+      <!-- UC: Consulter stats & résultats (Joueur) -->
+      <g class="uc-node" data-actor="J" data-id="J07"
+         data-desc="Performances (présences, buts, cartons, sélections) et résultats de l'équipe. Inexistant actuellement."
+         data-title="Consulter ses statistiques & résultats">
+        <ellipse cx="1400" cy="750" rx="125" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
+        <text x="1400" y="747" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter ses statistiques</text>
+        <text x="1400" y="762" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">&amp; résultats</text>
+      </g>
+
+      <!-- UC: Consulter calendrier désignation (Arbitre) -->
+      <g class="uc-node" data-actor="A" data-id="A04"
+         data-desc="Matchs attribués par la FBF avec dates, lieux, équipes. Désignation par fédération (Vigueur, MSA)."
+         data-title="Consulter calendrier de désignation">
+        <ellipse cx="1400" cy="850" rx="125" ry="28" fill="#13161E" stroke="#F4705A" stroke-width="1.5"/>
+        <text x="1400" y="847" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter calendrier</text>
+        <text x="1400" y="862" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de désignation</text>
+      </g>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- USE CASES — ZONE ADMINISTRATION -->
+      <!-- ═══════════════════════════════════════════ -->
+
+      <!-- UC: Créer/gérer une équipe -->
+      <g class="uc-node" data-actor="P,E" data-id="P02"
+         data-desc="Président (Vigueur, Gomido) ou Entraîneur (MSA). Catégorie, effectif min/max (18-25 Vigueur, 18-32 Gomido)."
+         data-title="Créer / gérer une équipe">
+        <ellipse cx="900" cy="1060" rx="125" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
+        <text x="900" y="1057" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Créer / gérer</text>
+        <text x="900" y="1072" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">une équipe</text>
+      </g>
+
+      <!-- UC: Consulter tableau de bord -->
+      <g class="uc-node" data-actor="P" data-id="P05"
+         data-desc="Vue exécutive: effectif actif, licences en cours, finances, prochaines compétitions, état stock."
+         data-title="Consulter le tableau de bord global">
+        <ellipse cx="1100" cy="1060" rx="130" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
+        <text x="1100" y="1057" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter tableau</text>
+        <text x="1100" y="1072" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de bord global</text>
+      </g>
+
+      <!-- UC: Affecter joueur à une équipe -->
+      <g class="uc-node" data-actor="E" data-id="E05"
+         data-desc="Affecte selon âge, niveau, poste. Junior performant peut rejoindre seniors (Vigueur, Gomido)."
+         data-title="Affecter un joueur à une équipe">
+        <ellipse cx="1310" cy="1060" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
+        <text x="1310" y="1057" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Affecter un joueur</text>
+        <text x="1310" y="1072" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">à une équipe</text>
+      </g>
+
+      <!-- UC: Planifier consultaion calendrier compétitions -->
+      <g class="uc-node" data-actor="E" data-id="E08"
+         data-desc="Visualise prochains matchs pour adapter son planning. MSA: planning variable selon compétitions."
+         data-title="Consulter le calendrier des compétitions">
+        <ellipse cx="1505" cy="1060" rx="130" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
+        <text x="1505" y="1057" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter calendrier</text>
+        <text x="1505" y="1072" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">des compétitions</text>
+      </g>
+
+      <!-- UC: Enregistrer sanctions fédérales -->
+      <g class="uc-node" data-actor="SG" data-id="SG05"
+         data-desc="Reçoit notifications suspension FBF (cartons), intègre dans système, notifie entraîneur et joueur."
+         data-title="Enregistrer les sanctions fédérales">
+        <ellipse cx="900" cy="1185" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
+        <text x="900" y="1182" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Enregistrer sanctions</text>
+        <text x="900" y="1197" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">fédérales</text>
+      </g>
+
+      <!-- UC: Consulter planning entraînement -->
+      <g class="uc-node" data-actor="J" data-id="J05"
+         data-desc="Visualise séances à venir. Remplace WhatsApp/SMS et réunions physiques actuellement pratiqués."
+         data-title="Consulter le planning d'entraînement">
+        <ellipse cx="1110" cy="1185" rx="130" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
+        <text x="1110" y="1182" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter le planning</text>
+        <text x="1110" y="1197" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">d'entraînement</text>
+      </g>
+
+      <!-- UC: Réserver terrain -->
+      <g class="uc-node" data-actor="P,SG,E" data-id="D10"
+         data-desc="Vigueur: contrat permanent. MSA: selon dispo stade. Gomido: chronogramme avec gestionnaire."
+         data-title="Réserver un terrain / une salle">
+        <ellipse cx="1340" cy="1185" rx="130" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
+        <text x="1340" y="1182" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Réserver un terrain</text>
+        <text x="1340" y="1197" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">/ une salle</text>
+      </g>
+
+      <!-- UC: Gérer les dossiers membres -->
+      <g class="uc-node" data-actor="SG" data-id="SG01"
+         data-desc="Archive dossiers inscription (CNI, certificat médical, photo). Tient registre officiel des membres actifs."
+         data-title="Gérer les dossiers des membres">
+        <ellipse cx="1530" cy="1185" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
+        <text x="1530" y="1182" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer les dossiers</text>
+        <text x="1530" y="1197" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">des membres</text>
+      </g>
+
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- FÉDÉRATION USE CASES (external zone) -->
+      <!-- ═══════════════════════════════════════════ -->
+      <rect x="1640" y="350" width="340" height="580" rx="8" fill="none" stroke="#2A3040" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="1660" y="375" font-family="JetBrains Mono,monospace" font-size="9" fill="#5A6070" letter-spacing="2">FÉDÉRATION (externe)</text>
+
+      <g class="uc-node" data-actor="F" data-id="F01"
+         data-desc="FBF valide dossiers. Gomido via febefoot connect. Vérification systématique avant compétition."
+         data-title="Délivrer / valider une licence">
+        <ellipse cx="1810" cy="420" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
+        <text x="1810" y="417" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Délivrer / valider</text>
+        <text x="1810" y="432" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">une licence</text>
+      </g>
+      <g class="uc-node" data-actor="F" data-id="F02"
+         data-desc="Confirme participation après vérification droits acquittés et conformité administrative."
+         data-title="Valider inscription championnat">
+        <ellipse cx="1810" cy="510" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
+        <text x="1810" y="507" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Valider inscription</text>
+        <text x="1810" y="522" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">championnat</text>
+      </g>
+      <g class="uc-node" data-actor="F" data-id="F03"
+         data-desc="Diffuse calendrier officiel. MSA s'y réfère pour adapter planning entraînements."
+         data-title="Publier calendrier des compétitions">
+        <ellipse cx="1810" cy="600" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
+        <text x="1810" y="597" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Publier calendrier</text>
+        <text x="1810" y="612" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">des compétitions</text>
+      </g>
+      <g class="uc-node" data-actor="F" data-id="F04"
+         data-desc="Vigueur & MSA: FBF uniquement. Gomido: les deux parties selon type de compétition."
+         data-title="Désigner les arbitres">
+        <ellipse cx="1810" cy="690" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
+        <text x="1810" y="695" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Désigner les arbitres</text>
+      </g>
+      <g class="uc-node" data-actor="F" data-id="F05"
+         data-desc="Calcule et publie classement national. Les 3 clubs confirment ce rôle central de la FBF."
+         data-title="Mettre à jour le classement général">
+        <ellipse cx="1810" cy="780" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
+        <text x="1810" y="777" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Mettre à jour</text>
+        <text x="1810" y="792" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">classement général</text>
+      </g>
+      <g class="uc-node" data-actor="F" data-id="F06"
+         data-desc="Vérifie validité certificats médicaux avant attribution/renouvellement licence. Unanime 3 clubs."
+         data-title="Contrôler les certificats médicaux">
+        <ellipse cx="1810" cy="870" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
+        <text x="1810" y="867" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Contrôler certificats</text>
+        <text x="1810" y="882" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">médicaux</text>
+      </g>
+
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- ACTORS — LEFT SIDE -->
+      <!-- ═══════════════════════════════════════════ -->
+
+      <!-- JOUEUR -->
+      <g id="actor-J">
+        <ellipse cx="130" cy="52" rx="18" ry="18" fill="none" stroke="#E05252" stroke-width="2"/>
+        <line x1="130" y1="70" x2="130" y2="105" stroke="#E05252" stroke-width="2"/>
+        <line x1="105" y1="82" x2="155" y2="82" stroke="#E05252" stroke-width="2"/>
+        <line x1="130" y1="105" x2="108" y2="130" stroke="#E05252" stroke-width="2"/>
+        <line x1="130" y1="105" x2="152" y2="130" stroke="#E05252" stroke-width="2"/>
+        <text x="130" y="148" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#E05252">Joueur</text>
+        <!-- associations -->
+        <line x1="148" y1="80" x2="470" y2="130" stroke="#E05252" stroke-width="1.5" opacity="0.5" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="90" x2="456" y2="295" stroke="#E05252" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="95" x2="456" y2="390" stroke="#E05252" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="100" x2="456" y2="600" stroke="#E05252" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="100" x2="456" y2="920" stroke="#E05252" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="105" x2="456" y2="1150" stroke="#E05252" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="105" x2="870" y2="600" stroke="#E05252" stroke-width="1.5" opacity="0.25" marker-end="url(#arr-open)"/>
+      </g>
+
+      <!-- ENTRAÎNEUR -->
+      <g id="actor-E">
+        <ellipse cx="130" cy="552" rx="18" ry="18" fill="none" stroke="#4A90E2" stroke-width="2"/>
+        <line x1="130" y1="570" x2="130" y2="605" stroke="#4A90E2" stroke-width="2"/>
+        <line x1="105" y1="582" x2="155" y2="582" stroke="#4A90E2" stroke-width="2"/>
+        <line x1="130" y1="605" x2="108" y2="630" stroke="#4A90E2" stroke-width="2"/>
+        <line x1="130" y1="605" x2="152" y2="630" stroke="#4A90E2" stroke-width="2"/>
+        <text x="130" y="648" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#4A90E2">Entraîneur</text>
+        <line x1="148" y1="570" x2="456" y2="600" stroke="#4A90E2" stroke-width="1.5" opacity="0.5" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="575" x2="456" y2="700" stroke="#4A90E2" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="580" x2="456" y2="800" stroke="#4A90E2" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="585" x2="875" y2="390" stroke="#4A90E2" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="585" x2="875" y2="490" stroke="#4A90E2" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="590" x2="1275" y2="650" stroke="#4A90E2" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="590" x2="1185" y2="1060" stroke="#4A90E2" stroke-width="1.5" opacity="0.25" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="590" x2="1380" y2="1060" stroke="#4A90E2" stroke-width="1.5" opacity="0.25" marker-end="url(#arr-open)"/>
+      </g>
+
+      <!-- ═══ ACTORS RIGHT SIDE ═══ -->
+
+      <!-- PRÉSIDENT -->
+      <g id="actor-P">
+        <ellipse cx="2260" cy="295" rx="18" ry="18" fill="none" stroke="#52B788" stroke-width="2"/>
+        <line x1="2260" y1="313" x2="2260" y2="348" stroke="#52B788" stroke-width="2"/>
+        <line x1="2235" y1="325" x2="2285" y2="325" stroke="#52B788" stroke-width="2"/>
+        <line x1="2260" y1="348" x2="2238" y2="373" stroke="#52B788" stroke-width="2"/>
+        <line x1="2260" y1="348" x2="2282" y2="373" stroke="#52B788" stroke-width="2"/>
+        <text x="2260" y="390" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#52B788">Président</text>
+        <line x1="2242" y1="310" x2="706" y2="130" stroke="#52B788" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="315" x2="706" y2="295" stroke="#52B788" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="318" x2="706" y2="480" stroke="#52B788" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="320" x2="1025" y2="130" stroke="#52B788" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="322" x2="1025" y2="295" stroke="#52B788" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="322" x2="1025" y2="1060" stroke="#52B788" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="322" x2="1230" y2="1060" stroke="#52B788" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
+      </g>
+
+      <!-- SECRÉTAIRE GÉNÉRAL -->
+      <g id="actor-SG">
+        <ellipse cx="2260" cy="620" rx="18" ry="18" fill="none" stroke="#E8A430" stroke-width="2"/>
+        <line x1="2260" y1="638" x2="2260" y2="673" stroke="#E8A430" stroke-width="2"/>
+        <line x1="2235" y1="650" x2="2285" y2="650" stroke="#E8A430" stroke-width="2"/>
+        <line x1="2260" y1="673" x2="2238" y2="698" stroke="#E8A430" stroke-width="2"/>
+        <line x1="2260" y1="673" x2="2282" y2="698" stroke="#E8A430" stroke-width="2"/>
+        <text x="2260" y="718" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#E8A430">Secrétaire</text>
+        <text x="2260" y="732" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#E8A430">Général</text>
+        <line x1="2242" y1="635" x2="706" y2="295" stroke="#E8A430" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="638" x2="1025" y2="130" stroke="#E8A430" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="641" x2="1025" y2="295" stroke="#E8A430" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="644" x2="1025" y2="490" stroke="#E8A430" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="647" x2="1025" y2="1185" stroke="#E8A430" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="650" x2="1275" y2="1185" stroke="#E8A430" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="652" x2="1530" y2="1185" stroke="#E8A430" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
+      </g>
+
+      <!-- TRÉSORIER -->
+      <g id="actor-T">
+        <ellipse cx="2260" cy="870" rx="18" ry="18" fill="none" stroke="#A880F0" stroke-width="2"/>
+        <line x1="2260" y1="888" x2="2260" y2="923" stroke="#A880F0" stroke-width="2"/>
+        <line x1="2235" y1="900" x2="2285" y2="900" stroke="#A880F0" stroke-width="2"/>
+        <line x1="2260" y1="923" x2="2238" y2="948" stroke="#A880F0" stroke-width="2"/>
+        <line x1="2260" y1="923" x2="2282" y2="948" stroke="#A880F0" stroke-width="2"/>
+        <text x="2260" y="965" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#A880F0">Trésorier</text>
+        <line x1="2242" y1="882" x2="1130" y2="600" stroke="#A880F0" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="886" x2="1130" y2="720" stroke="#A880F0" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="890" x2="1130" y2="800" stroke="#A880F0" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="894" x2="1130" y2="900" stroke="#A880F0" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="898" x2="706" y2="1150" stroke="#A880F0" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
+      </g>
+
+      <!-- RESP. MATÉRIEL -->
+      <g id="actor-CM">
+        <ellipse cx="130" cy="1150" rx="18" ry="18" fill="none" stroke="#38BDF8" stroke-width="2"/>
+        <line x1="130" y1="1168" x2="130" y2="1203" stroke="#38BDF8" stroke-width="2"/>
+        <line x1="105" y1="1180" x2="155" y2="1180" stroke="#38BDF8" stroke-width="2"/>
+        <line x1="130" y1="1203" x2="108" y2="1228" stroke="#38BDF8" stroke-width="2"/>
+        <line x1="130" y1="1203" x2="152" y2="1228" stroke="#38BDF8" stroke-width="2"/>
+        <text x="130" y="1246" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#38BDF8">Resp.</text>
+        <text x="130" y="1260" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#38BDF8">Matériel</text>
+        <line x1="148" y1="1155" x2="456" y2="1050" stroke="#38BDF8" stroke-width="1.5" opacity="0.5" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="1158" x2="456" y2="1150" stroke="#38BDF8" stroke-width="1.5" opacity="0.5" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="1162" x2="456" y2="1280" stroke="#38BDF8" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
+        <line x1="148" y1="1165" x2="870" y2="900" stroke="#38BDF8" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
+      </g>
+
+      <!-- ARBITRE -->
+      <g id="actor-A">
+        <ellipse cx="2260" cy="490" rx="18" ry="18" fill="none" stroke="#F4705A" stroke-width="2"/>
+        <line x1="2260" y1="508" x2="2260" y2="543" stroke="#F4705A" stroke-width="2"/>
+        <line x1="2235" y1="520" x2="2285" y2="520" stroke="#F4705A" stroke-width="2"/>
+        <line x1="2260" y1="543" x2="2238" y2="568" stroke="#F4705A" stroke-width="2"/>
+        <line x1="2260" y1="543" x2="2282" y2="568" stroke="#F4705A" stroke-width="2"/>
+        <text x="2260" y="585" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#F4705A">Arbitre</text>
+        <line x1="2242" y1="503" x2="1525" y2="130" stroke="#F4705A" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="507" x2="1525" y2="310" stroke="#F4705A" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="511" x2="1525" y2="490" stroke="#F4705A" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="515" x2="1525" y2="850" stroke="#F4705A" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
+      </g>
+
+      <!-- FÉDÉRATION -->
+      <g id="actor-F">
+        <ellipse cx="2260" cy="750" rx="18" ry="18" fill="none" stroke="#8892A4" stroke-width="2"/>
+        <line x1="2260" y1="768" x2="2260" y2="803" stroke="#8892A4" stroke-width="2"/>
+        <line x1="2235" y1="780" x2="2285" y2="780" stroke="#8892A4" stroke-width="2"/>
+        <line x1="2260" y1="803" x2="2238" y2="828" stroke="#8892A4" stroke-width="2"/>
+        <line x1="2260" y1="803" x2="2282" y2="828" stroke="#8892A4" stroke-width="2"/>
+        <text x="2260" y="845" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#8892A4">Fédération</text>
+        <text x="2260" y="859" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" fill="#5A6070">(FBF)</text>
+        <line x1="2242" y1="763" x2="1935" y2="420" stroke="#8892A4" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="767" x2="1935" y2="510" stroke="#8892A4" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="771" x2="1935" y2="600" stroke="#8892A4" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="775" x2="1935" y2="690" stroke="#8892A4" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="779" x2="1935" y2="780" stroke="#8892A4" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+        <line x1="2242" y1="783" x2="1935" y2="870" stroke="#8892A4" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
+      </g>
+
+      <!-- ═══ TITLE ═══ -->
+      <rect x="370" y="1730" width="1640" height="55" fill="#13161E" rx="0 0 12 12"/>
+      <text x="1190" y="1760" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#3A4050">Diagramme de Cas d'Utilisation — Gestion Club Sportif Bénin</text>
+      <text x="1190" y="1776" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#2A3040">8 acteurs · 46 cas d'utilisation · Basé sur enquête terrain (Vigueur FC, MSA, AS Gomido)</text>
+
+    </svg>
   </div>
 </div>
 
-<!-- LEGEND -->
-<div class="legend">
-  <div class="leg"><div class="leg-dot" style="background:var(--c1)"></div>Joueur / Membre</div>
-  <div class="leg"><div class="leg-dot" style="background:var(--c2)"></div>Entraîneur / Staff technique</div>
-  <div class="leg"><div class="leg-dot" style="background:var(--c3)"></div>Dirigeant (Président · Trésorier · SG)</div>
-  <div class="leg"><div class="leg-dot" style="background:var(--c4)"></div>Responsable Matériel</div>
-  <div class="leg"><div class="leg-dot" style="background:var(--c5)"></div>Arbitre</div>
-  <div class="leg"><div class="leg-dot" style="background:var(--c6)"></div>Fédération (FBF / febefoot connect)</div>
-  <div class="leg" style="margin-left:auto">
-    <span class="rp rp-inc">«include»</span>
-    <span class="rp rp-ext">«extend»</span>
-    <span class="rp rp-ass">association</span>
-  </div>
+<!-- TOOLTIP -->
+<div class="tooltip" id="tooltip">
+  <div class="tt-actor" id="tt-actor"></div>
+  <div class="tt-uc" id="tt-uc"></div>
+  <div class="tt-desc" id="tt-desc"></div>
 </div>
 
-<!-- SOURCE LEGEND -->
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;font-size:11px;color:var(--ink3)">
-  <strong>Sources :</strong>
-  <span class="src-badge s-v">🔴 Vigueur</span>
-  <span class="src-badge s-m">🟢 MSA</span>
-  <span class="src-badge s-g">🔵 Gomido</span>
-  <span class="src-badge s-exp">🟣 Expert</span>
-  <span style="font-style:italic">— déduites de la logique métier non couverte par les réponses</span>
-</div>
+<script>
+// ── Tooltip on UC hover ──
+const tooltip = document.getElementById('tooltip');
+const ttActor = document.getElementById('tt-actor');
+const ttUc = document.getElementById('tt-uc');
+const ttDesc = document.getElementById('tt-desc');
 
-<!-- MAIN TABLE -->
-<div class="wrap">
-<table>
-  <thead>
-    <tr>
-      <th style="width:160px">Acteur</th>
-      <th style="width:185px">Cas d'utilisation</th>
-      <th>Description — basée sur le terrain</th>
-      <th style="width:130px">Source(s)</th>
-      <th style="width:185px">Relations UML</th>
-    </tr>
-  </thead>
-  <tbody>
+const actorNames = {
+  J:'Joueur', E:'Entraîneur', P:'Président', SG:'Secrétaire Général',
+  T:'Trésorier', CM:'Resp. Matériel', A:'Arbitre', F:'Fédération'
+};
 
-    <!-- ══ JOUEUR ══ -->
-    <tr class="sec-row"><td colspan="5" class="sec1">👤 JOUEUR / MEMBRE</td></tr>
+document.querySelectorAll('.uc-node[data-title]').forEach(node => {
+  node.style.cursor = 'pointer';
 
-    <tr>
-      <td class="actor-cell" rowspan="8">
-        <div class="actor-block">
-          <div class="actor-pill ap1">👤 Joueur</div>
-          <div class="actor-sub">Licencié ou non. Catégories : U13, U15, U17, U20, Sénior, Féminin. Tous clubs.</div>
-        </div>
-      </td>
-      <td class="uc-cell"><span class="uc-num">UC-J01</span>S'inscrire au club</td>
-      <td class="desc-cell">Remplit le formulaire papier au bureau. Fournit CNI, photo, autorisation parentale si mineur. Système remplace ce formulaire papier.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Fournir pièces justificatives</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Joindre autorisation parentale (mineur)</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-J02</span>Payer sa cotisation</td>
-      <td class="desc-cell">Règle la cotisation (mensuelle chez Vigueur, annuelle chez MSA/Gomido) en espèces ou via Mobile Money. Reçoit un reçu papier.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Générer un reçu de paiement</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Envoyer rappel si impayé (Vigueur)</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-J03</span>Confirmer sa présence à un entraînement</td>
-      <td class="desc-cell">Le joueur signale sa disponibilité pour la séance planifiée. Remplace le système actuel de feuille papier ou cahier entraîneur.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier cotisation (Vigueur)</div>
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier appartenance à l'équipe</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-J04</span>Consulter son profil & statut</td>
-      <td class="desc-cell">Accède à ses informations personnelles, statut de licence, cotisation à jour, équipe d'appartenance et sanctions en cours.</td>
-      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Voir statut licence & cotisation</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-J05</span>Consulter le planning d'entraînement</td>
-      <td class="desc-cell">Visualise les séances planifiées. Remplace la communication actuelle par WhatsApp/SMS ou réunion physique (pratique des 3 clubs).</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Recevoir notification de modification</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-J06</span>Consulter ses statistiques</td>
-      <td class="desc-cell">Visualise ses performances individuelles : présences, sélections, buts, cartons. Actuellement inexistant — besoin exprimé implicitement.</td>
-      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Consulter classement équipe</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-J07</span>Emprunter un équipement</td>
-      <td class="desc-cell">Fait une demande de prêt de matériel. Géré par l'entraîneur (Vigueur, MSA) ou par le CM dédié (Gomido). Le système trace le prêt.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier disponibilité équipement</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler dommage à retour</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-J08</span>Consulter les résultats & classement</td>
-      <td class="desc-cell">Accède aux scores des derniers matchs et au classement. Actuellement transmis par la fédération ou communiqué verbalement.</td>
-      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Voir feuille de match</div>
-      </td>
-    </tr>
+  node.addEventListener('mouseenter', e => {
+    const actors = (node.dataset.actor || '').split(',').map(a => actorNames[a.trim()]).filter(Boolean);
+    ttActor.textContent = actors.join(' · ');
+    ttActor.style.color = '#4A90E2';
+    ttUc.textContent = node.dataset.title || '';
+    ttDesc.textContent = node.dataset.desc || '';
+    tooltip.classList.add('show');
+    positionTooltip(e);
+  });
 
-    <!-- ══ ENTRAÎNEUR ══ -->
-    <tr class="sec-row"><td colspan="5" class="sec2">🏋️ ENTRAÎNEUR / STAFF TECHNIQUE</td></tr>
+  node.addEventListener('mousemove', positionTooltip);
 
-    <tr>
-      <td class="actor-cell" rowspan="9">
-        <div class="actor-block">
-          <div class="actor-pill ap2">🏋️ Entraîneur</div>
-          <div class="actor-sub">Dédié par équipe (MSA, Gomido) ou mutualisé selon saison (Vigueur). Gère aussi le matériel chez Vigueur et MSA.</div>
-        </div>
-      </td>
-      <td class="uc-cell"><span class="uc-num">UC-E01</span>Planifier un entraînement</td>
-      <td class="desc-cell">Définit date, heure, lieu, type de séance (3x/semaine minimum pour les 3 clubs). Planning fixe ou variable selon compétitions. Communique ensuite par WhatsApp.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Réserver le terrain</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Notifier les joueurs de l'équipe</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-E02</span>Annuler / modifier un entraînement</td>
-      <td class="desc-cell">MSA mentionne une disponibilité variable du stade. Gomido a un chronogramme avec le gestionnaire. Le système notifie automatiquement les joueurs.</td>
-      <td class="src-cell"><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Notifier annulation aux joueurs</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-E03</span>Enregistrer les présences</td>
-      <td class="desc-cell">Marque présents/absents. Vigueur : feuille papier. MSA : cahier. Gomido : aucun suivi. Le système digitalise ce processus critique (absences → pénalités chez Vigueur).</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Alerter absence répétée (→ pénalité)</div>
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Générer rapport de présences</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-E04</span>Composer la liste de match</td>
-      <td class="desc-cell">Vigueur : selon performance. MSA : entraîneur responsable. Gomido : sélectionneur → SG produit la liste officielle avec numéros de licence.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier éligibilité chaque joueur</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Soumettre liste à l'arbitre / SG</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-E05</span>Affecter un joueur à une équipe</td>
-      <td class="desc-cell">Critères : âge/catégorie, niveau sportif, poste, décision coach. Un junior performant peut monter chez les seniors (Vigueur, Gomido).</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier critères âge / niveau</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Valider promotion inter-équipes</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-E06</span>Saisir les statistiques de match</td>
-      <td class="desc-cell">Enregistre buts, passes, cartons après chaque rencontre. Actuellement verbal ou papier. Alimente le suivi de performance pour les sélections futures.</td>
-      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour stats individuelles</div>
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Mettre à jour classement</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-E07</span>Gérer le matériel sportif</td>
-      <td class="desc-cell">Rôle assumé par l'entraîneur chez Vigueur (inventaire périodique) et MSA. Chez Gomido, c'est le CM. Le système unifie cette gestion.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour inventaire</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler équipement endommagé</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-E08</span>Consulter le calendrier des compétitions</td>
-      <td class="desc-cell">Visualise les prochains matchs pour adapter le planning des séances. Mentionné explicitement par MSA (planning variable selon compétitions).</td>
-      <td class="src-cell"><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Adapter planning entraînement</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-E09</span>Évaluer un joueur</td>
-      <td class="desc-cell">Gomido mentionne explicitement la « performance » comme critère de sélection et de promotion inter-équipes. Formalise l'évaluation continue.</td>
-      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Consulter historique du joueur</div>
-      </td>
-    </tr>
+  node.addEventListener('mouseleave', () => {
+    tooltip.classList.remove('show');
+  });
 
-    <!-- ══ DIRIGEANT ══ -->
-    <tr class="sec-row"><td colspan="5" class="sec3">🏛️ DIRIGEANT — Président · Trésorier · Secrétaire Général</td></tr>
+  // highlight on click
+  node.addEventListener('click', () => {
+    document.querySelectorAll('.uc-node ellipse').forEach(el => {
+      el.style.filter = '';
+      el.style.opacity = '';
+    });
+    const ell = node.querySelector('ellipse');
+    if (ell) {
+      ell.style.filter = 'drop-shadow(0 0 8px currentColor)';
+      ell.style.opacity = '1';
+    }
+  });
+});
 
-    <tr>
-      <td class="actor-cell" rowspan="11">
-        <div class="actor-block">
-          <div class="actor-pill ap3">🏛️ Dirigeant</div>
-          <div class="actor-sub">Président, VP, SG, SGA, Trésorier, Organisateur. Structure complète identifiée chez les 3 clubs.</div>
-        </div>
-      </td>
-      <td class="uc-cell"><span class="uc-num">UC-D01</span>Valider l'inscription d'un membre</td>
-      <td class="desc-cell">Examine le dossier papier, approuve ou refuse. Crée le compte dans le système. Rôle actuel du Président ou SG selon les clubs.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier complétude du dossier</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Notifier refus / validation</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D02</span>Enregistrer un paiement de cotisation</td>
-      <td class="desc-cell">Le Trésorier saisit les paiements (espèces ou Mobile Money), émet les reçus. Tous clubs actuellement sur papier — le système numérise ce flux.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Générer reçu de paiement</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Suspendre accès membre impayé (Vigueur)</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D03</span>Gérer les licences fédérales</td>
-      <td class="desc-cell">SG (Vigueur, Gomido) ou Président (MSA). Gomido : via febefoot connect (plateforme FBF numérique). Suivi des validations et expirantes.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Transmettre dossier à la fédération</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Alerter licence proche expiration</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D04</span>Créer / gérer une équipe</td>
-      <td class="desc-cell">Vigueur : Président. Gomido : Président + SG. MSA : Entraîneur. Définit catégorie, effectif min/max (18–25 chez Vigueur, 18–32 chez Gomido).</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Définir effectif min / max</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D05</span>Inscrire le club à une compétition</td>
-      <td class="desc-cell">Gomido : cotisation annuelle à la FBF en début de saison. MSA : bureau décide en début de saison. Fourniture des documents requis par la fédération.</td>
-      <td class="src-cell"><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier conformité documents</div>
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Fédération valide inscription</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D06</span>Produire la liste officielle de match</td>
-      <td class="desc-cell">Chez Gomido, c'est le SG qui produit la liste avec les numéros de licence après sélection par le coach. Soumise à l'arbitre avant match.</td>
-      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier licences des joueurs sélectionnés</div>
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Soumettre à l'arbitre</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D07</span>Gérer le budget du club</td>
-      <td class="desc-cell">Trésorier : recettes (cotisations, éventuels sponsors) et dépenses (déplacements, arbitrage, matériel). Actuellement tenu manuellement.</td>
-      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Générer bilan financier</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Exporter rapport PDF</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D08</span>Gérer l'inventaire des équipements</td>
-      <td class="desc-cell">Vigueur : inventaire périodique confié à l'entraîneur. Gomido : CM dédié sous supervision du Trésorier (TG). Le système centralise cet inventaire.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Déclencher commande réapprovisionnement</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D09</span>Gérer les sanctions disciplinaires</td>
-      <td class="desc-cell">Vigueur : suspension temporaire pour impayé. Gomido : suspension du joueur pour absences. Enregistre, notifie et suit les sanctions.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Enregistrer la sanction</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Notifier le joueur sanctionné</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D10</span>Réserver un terrain / une salle</td>
-      <td class="desc-cell">Vigueur : contrat permanent avec directeur du terrain. MSA : selon disponibilité du stade. Gomido : chronogramme prédéfini par gestionnaire.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier disponibilité terrain</div>
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Lier réservation à l'entraînement</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-D11</span>Consulter le tableau de bord global</td>
-      <td class="desc-cell">Vue synthétique : effectif actif, cotisations à jour, licences expirantes, prochains matchs, état du stock. Besoin central pour les dirigeants.</td>
-      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Exporter rapport</div>
-      </td>
-    </tr>
+function positionTooltip(e) {
+  const x = e.clientX + 16, y = e.clientY - 10;
+  tooltip.style.left = Math.min(x, window.innerWidth - 260) + 'px';
+  tooltip.style.top = Math.max(y, 10) + 'px';
+}
 
-    <!-- ══ RESPONSABLE MATÉRIEL ══ -->
-    <tr class="sec-row"><td colspan="5" class="sec4">📦 RESPONSABLE MATÉRIEL (CM)</td></tr>
+// ── Actor highlight from sidebar ──
+function highlightActor(actorId) {
+  document.querySelectorAll('.uc-node ellipse').forEach(el => {
+    el.style.opacity = '0.2';
+  });
+  document.querySelectorAll(`.uc-node[data-actor*="${actorId}"] ellipse`).forEach(el => {
+    el.style.opacity = '1';
+    el.style.filter = 'drop-shadow(0 0 6px currentColor)';
+  });
+  document.querySelectorAll('.actor-item').forEach(i => i.classList.remove('active'));
+  setTimeout(() => {
+    document.querySelectorAll('.uc-node ellipse').forEach(el => {
+      el.style.opacity = '';
+      el.style.filter = '';
+    });
+  }, 2500);
+}
 
-    <tr>
-      <td class="actor-cell" rowspan="4">
-        <div class="actor-block">
-          <div class="actor-pill ap4">📦 Resp. Matériel</div>
-          <div class="actor-sub">Acteur distinct identifié chez AS Gomido (CM). Supervisé par le Trésorier. Rôle assumé par l'entraîneur chez Vigueur et MSA.</div>
-        </div>
-      </td>
-      <td class="uc-cell"><span class="uc-num">UC-R01</span>Tenir l'inventaire du matériel</td>
-      <td class="desc-cell">Enregistre tous les équipements du club (ballons, maillots, cônes, protections…). Gomido : CM dédié qui remet l'inventaire au Trésorier.</td>
-      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour quantité & état</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler rupture de stock</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-R02</span>Valider / refuser un prêt d'équipement</td>
-      <td class="desc-cell">Examine la demande de prêt d'un joueur ou entraîneur. Vérifie disponibilité et état. Enregistre le prêt avec date de retour prévue.</td>
-      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier disponibilité équipement</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Refuser si équipement indisponible</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-R03</span>Enregistrer le retour d'équipement</td>
-      <td class="desc-cell">Réceptionne le matériel retourné, vérifie l'état, clôture le prêt. Signale tout dommage au Trésorier pour facturation éventuelle.</td>
-      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour inventaire</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler dommage au dirigeant</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-R04</span>Préparer le matériel pour un match / entraînement</td>
-      <td class="desc-cell">Sort et prépare le matériel nécessaire sur demande de l'entraîneur avant chaque séance ou rencontre officielle.</td>
-      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier stock disponible</div>
-      </td>
-    </tr>
+// ── Reset zoom ──
+function resetZoom() {
+  document.getElementById('canvasWrap').scrollTo(0, 0);
+}
 
-    <!-- ══ ARBITRE ══ -->
-    <tr class="sec-row"><td colspan="5" class="sec5">🟡 ARBITRE</td></tr>
-
-    <tr>
-      <td class="actor-cell" rowspan="4">
-        <div class="actor-block">
-          <div class="actor-pill ap5">🟡 Arbitre</div>
-          <div class="actor-sub">Désigné par la FBF (Vigueur, MSA) ou par les deux parties selon compétition (Gomido). Valide feuille de match et saisit résultat.</div>
-        </div>
-      </td>
-      <td class="uc-cell"><span class="uc-num">UC-A01</span>Valider la feuille de match</td>
-      <td class="desc-cell">Vérifie les licences des joueurs alignés avant coup d'envoi. Gomido : le SG soumet la liste avec numéros de licence à l'arbitre avant match.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier licences des joueurs</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Refuser joueur non conforme</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-A02</span>Saisir le résultat du match</td>
-      <td class="desc-cell">Enregistre score, buteurs, cartons. Déclenche mise à jour automatique du classement FBF. Remplace la feuille de match papier actuelle.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Mettre à jour classement</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Signaler incident grave</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-A03</span>Gérer les cartons & suspensions</td>
-      <td class="desc-cell">Saisit les cartons par joueur. Le système cumule et calcule automatiquement les suspensions selon le barème FBF. Notifie le club.</td>
-      <td class="src-cell"><span class="src-badge s-exp">🟣 Expert</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Calculer suspension automatique</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Notifier le club concerné</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-A04</span>Consulter son calendrier de désignation</td>
-      <td class="desc-cell">Accède à la liste des matchs qui lui ont été attribués par la FBF avec dates, lieux et équipes. Vigueur et MSA confirment désignation par fédération.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Fédération gère les désignations</div>
-      </td>
-    </tr>
-
-    <!-- ══ FÉDÉRATION ══ -->
-    <tr class="sec-row"><td colspan="5" class="sec6">🏅 FÉDÉRATION (FBF / febefoot connect)</td></tr>
-
-    <tr>
-      <td class="actor-cell" rowspan="6">
-        <div class="actor-block">
-          <div class="actor-pill ap6">🏅 Fédération</div>
-          <div class="actor-sub">FBF pour les 3 clubs. AS Gomido utilise febefoot connect pour l'enrôlement des licences. Acteur externe au système.</div>
-        </div>
-      </td>
-      <td class="uc-cell"><span class="uc-num">UC-F01</span>Délivrer / valider une licence</td>
-      <td class="desc-cell">FBF valide les dossiers envoyés par le SG (Vigueur, Gomido) ou le Président (MSA). Gomido passe par febefoot connect. Vérification systématique avant compétition (Vigueur, Gomido).</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier dossier complet</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Rejeter dossier incomplet</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-F02</span>Valider l'inscription à un championnat</td>
-      <td class="desc-cell">Confirme participation après vérification des droits acquittés et conformité. Gomido : cotisation annuelle FBF = droit d'accès aux compétitions.</td>
-      <td class="src-cell"><span class="src-badge s-g">🔵 Gomido</span><span class="src-badge s-m">🟢 MSA</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier droits d'inscription acquittés</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-F03</span>Publier le calendrier des compétitions</td>
-      <td class="desc-cell">Diffuse le calendrier officiel des matchs et tournois. Les clubs s'y réfèrent pour adapter leur planning d'entraînements (mentionné par MSA).</td>
-      <td class="src-cell"><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Clubs et arbitres consultent le calendrier</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-F04</span>Désigner les arbitres</td>
-      <td class="desc-cell">Vigueur et MSA : désignation uniquement par la fédération. Gomido : par les deux parties selon type de compétition. FBF reste acteur principal.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-ass">association</span>Notifier club et arbitre désigné</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-F05</span>Mettre à jour le classement général</td>
-      <td class="desc-cell">FBF met à jour le classement national après réception et validation des feuilles de match. Les 3 clubs confirment ce rôle de la fédération.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Intégrer résultats des matchs validés</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="uc-cell"><span class="uc-num">UC-F06</span>Contrôler les certificats médicaux</td>
-      <td class="desc-cell">Les 3 clubs confirment unanimement ce rôle de la FBF. Vérifie la validité des certificats médicaux des joueurs licenciés avant la saison.</td>
-      <td class="src-cell"><span class="src-badge s-v">🔴 Vigueur</span><span class="src-badge s-m">🟢 MSA</span><span class="src-badge s-g">🔵 Gomido</span></td>
-      <td class="rel-cell">
-        <div class="rel-entry"><span class="rp rp-inc">«include»</span>Vérifier certificat médical valide</div>
-        <div class="rel-entry"><span class="rp rp-ext">«extend»</span>Rejeter licence sans certificat</div>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
-</div>
-
-<!-- NOTE -->
-<div class="note">
-  <strong>Méthodologie :</strong> Les cas d'utilisation sont dérivés de 3 sources : les réponses terrain des clubs (🔴 Vigueur FC, 🟢 MSA, 🔵 AS Gomido), et l'expertise métier (🟣 Expert) pour combler les lacunes non couvertes mais nécessaires à la cohérence du système. Le <strong>Responsable Matériel (CM)</strong> est identifié comme acteur distinct grâce à AS Gomido — sa présence dans le diagramme de cas d'utilisation dépendra du périmètre retenu. La <strong>Fédération</strong> est un <em>acteur externe</em> : elle interagit avec le système mais n't en est pas l'opérateur.
-</div>
-
-</div>
+// ── Download SVG ──
+function downloadSVG() {
+  const svg = document.getElementById('mainSvg');
+  const serializer = new XMLSerializer();
+  let source = serializer.serializeToString(svg);
+  source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+  const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "diagramme_cas_utilisation_club_sportif.svg";
+  link.click();
+}
+</script>
 </body>
 </html>
