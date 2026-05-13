@@ -3,1001 +3,511 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagramme de Cas d'Utilisation — Club Sportif</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Diagramme de Classes — Club Sportif</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0C0E13;
-  --panel:#13161E;
-  --border:#1E2330;
-  --ink:#E8ECF4;
-  --muted:#5A6070;
-  --dim:#2A2F3E;
-
-  --cJ:#E05252;   /* Joueur */
-  --cE:#4A90E2;   /* Entraîneur */
-  --cP:#52B788;   /* Président */
-  --cSG:#E8A430;  /* Secrétaire Général */
-  --cT:#A880F0;   /* Trésorier */
-  --cCM:#38BDF8;  /* Resp. Matériel */
-  --cA:#F4705A;   /* Arbitre */
-  --cF:#8892A4;   /* Fédération */
-  --sys:#1E2330;  /* système boundary */
+  --bg:#0B0D11;--panel:#111318;--border:#1A1E28;--ink:#E2E8F4;--muted:#4E5666;
+  --dim:#1E2330;--soft:#8A94A8;
 }
+html,body{width:100%;height:100%;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',sans-serif;overflow:hidden}
 
-html,body{width:100%;min-height:100%;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',sans-serif;overflow-x:hidden}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:11px 22px;background:var(--panel);border-bottom:1px solid var(--border);z-index:10;position:relative}
+.tl{display:flex;align-items:center;gap:10px}
+.logo{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.logo b{color:#4A90E2}
+.ttl{font-size:13px;font-weight:600;color:var(--ink)}
+.badge{padding:2px 8px;background:rgba(74,144,226,.12);border:1px solid rgba(74,144,226,.28);border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#4A90E2}
+.tr{display:flex;gap:7px}
+.btn{padding:5px 13px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:.14s}
+.bg{background:transparent;border:1px solid var(--border);color:var(--muted)}.bg:hover{border-color:#2E3548;color:var(--ink)}
+.bb{background:#4A90E2;color:#fff}.bb:hover{opacity:.85}
 
-/* ── TOP BAR ── */
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 28px;
-  background:var(--panel);
-  border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:100;
-}
-.topbar-left{display:flex;align-items:center;gap:14px}
-.logo{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-.logo span{color:var(--cE)}
-.title-bar{font-size:13px;font-weight:600;color:var(--ink)}
-.badge-uml{padding:3px 9px;background:rgba(74,144,226,0.15);border:1px solid rgba(74,144,226,0.3);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cE)}
+.layout{display:flex;height:calc(100vh - 47px)}
 
-.topbar-right{display:flex;gap:10px;align-items:center}
-.btn{padding:6px 14px;border-radius:5px;font-size:11.5px;font-weight:600;cursor:pointer;border:none;font-family:'Bricolage Grotesque',sans-serif;transition:.15s}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
-.btn-ghost:hover{border-color:var(--dim);color:var(--ink)}
-.btn-primary{background:var(--cE);color:white}
-.btn-primary:hover{opacity:.85}
+.sidebar{width:190px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:14px 11px;overflow-y:auto;font-size:11.5px}
+.sl{font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:14px}
+.sl:first-child{margin-top:0}
+.ci{display:flex;align-items:center;gap:6px;padding:5px 6px;border-radius:4px;cursor:pointer;margin-bottom:1px;transition:.12s}
+.ci:hover{background:rgba(255,255,255,.04)}
+.cd{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.cn{font-size:11px;font-weight:500}
+.leg{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ll{flex-shrink:0}
+.lt{font-size:10.5px;color:var(--muted)}
 
-/* ── LAYOUT ── */
-.layout{display:flex;height:calc(100vh - 53px)}
-
-/* ── SIDEBAR ── */
-.sidebar{
-  width:220px;flex-shrink:0;
-  background:var(--panel);
-  border-right:1px solid var(--border);
-  padding:18px 14px;
-  overflow-y:auto;
-}
-.sidebar-section{margin-bottom:22px}
-.sidebar-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-left:4px}
-
-.actor-item{
-  display:flex;align-items:center;gap:8px;
-  padding:7px 8px;border-radius:6px;
-  cursor:pointer;transition:.12s;
-  margin-bottom:2px;
-}
-.actor-item:hover{background:rgba(255,255,255,.04)}
-.actor-item.active{background:rgba(255,255,255,.06)}
-
-.actor-icon-wrap{
-  width:28px;height:28px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;flex-shrink:0;border:1.5px solid;
-}
-.actor-name{font-size:12px;font-weight:500;line-height:1.2}
-.actor-count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
-
-.rel-legend{margin-top:4px}
-.rel-item{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.rel-line{width:32px;height:2px;flex-shrink:0}
-.rel-dashed{border-top:2px dashed;width:32px}
-.rel-label{font-size:11px;color:var(--muted)}
-
-/* ── CANVAS ── */
-.canvas-wrap{
-  flex:1;overflow:auto;
-  background:var(--bg);
-  position:relative;
-}
-.canvas-wrap::-webkit-scrollbar{width:6px;height:6px}
-.canvas-wrap::-webkit-scrollbar-track{background:var(--bg)}
-.canvas-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-
+.cw{flex:1;overflow:auto;background:var(--bg)}
+.cw::-webkit-scrollbar{width:5px;height:5px}
+.cw::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 svg{display:block}
 
-/* ── TOOLTIP ── */
-.tooltip{
-  position:fixed;
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:10px 14px;
-  pointer-events:none;
-  opacity:0;
-  transition:opacity .15s;
-  z-index:200;
-  max-width:240px;
-  box-shadow:0 8px 32px rgba(0,0,0,.5);
-}
-.tooltip.show{opacity:1}
-.tt-actor{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
-.tt-uc{font-size:13px;font-weight:600;margin-bottom:4px}
-.tt-desc{font-size:11.5px;color:var(--muted);line-height:1.5}
-
+.tt{position:fixed;background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:9px 13px;pointer-events:none;opacity:0;transition:opacity .12s;z-index:200;max-width:240px;box-shadow:0 8px 28px rgba(0,0,0,.6);font-size:11.5px;line-height:1.55}
+.tt.on{opacity:1}
+.tt-name{font-weight:700;font-size:13px;margin-bottom:4px}
+.tt-desc{color:var(--muted)}
 </style>
 </head>
 <body>
-
 <div class="topbar">
-  <div class="topbar-left">
-    <div class="logo">UML <span>·</span> DCU</div>
-    <div class="title-bar">Diagramme de Cas d'Utilisation — Gestion Club Sportif · Bénin</div>
-    <span class="badge-uml">«use case diagram»</span>
+  <div class="tl">
+    <div class="logo">UML <b>·</b> DClasses</div>
+    <div class="ttl">Diagramme de Classes — Gestion Club Sportif · Bénin</div>
+    <span class="badge">«class diagram»</span>
   </div>
-  <div class="topbar-right">
-    <button class="btn btn-ghost" onclick="resetZoom()">Reset zoom</button>
-    <button class="btn btn-primary" onclick="downloadSVG()">↓ Exporter SVG</button>
+  <div class="tr">
+    <button class="btn bg" onclick="document.getElementById('cw').scrollTo(600,200)">↖ Reset</button>
+    <button class="btn bb" onclick="dlSVG()">↓ SVG</button>
   </div>
 </div>
 
 <div class="layout">
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">Acteurs (8)</div>
-      <div class="actor-item" onclick="highlightActor('J')">
-        <div class="actor-icon-wrap" style="color:var(--cJ);border-color:var(--cJ);background:rgba(224,82,82,.1)">👤</div>
-        <div>
-          <div class="actor-name">Joueur</div>
-        </div>
-        <div class="actor-count">7</div>
-      </div>
-      <div class="actor-item" onclick="highlightActor('E')">
-        <div class="actor-icon-wrap" style="color:var(--cE);border-color:var(--cE);background:rgba(74,144,226,.1)">🏋️</div>
-        <div><div class="actor-name">Entraîneur</div></div>
-        <div class="actor-count">8</div>
-      </div>
-      <div class="actor-item" onclick="highlightActor('P')">
-        <div class="actor-icon-wrap" style="color:var(--cP);border-color:var(--cP);background:rgba(82,183,136,.1)">🏅</div>
-        <div><div class="actor-name">Président</div></div>
-        <div class="actor-count">5</div>
-      </div>
-      <div class="actor-item" onclick="highlightActor('SG')">
-        <div class="actor-icon-wrap" style="color:var(--cSG);border-color:var(--cSG);background:rgba(232,164,48,.1)">📋</div>
-        <div><div class="actor-name">Secrétaire Gén.</div></div>
-        <div class="actor-count">5</div>
-      </div>
-      <div class="actor-item" onclick="highlightActor('T')">
-        <div class="actor-icon-wrap" style="color:var(--cT);border-color:var(--cT);background:rgba(168,128,240,.1)">💰</div>
-        <div><div class="actor-name">Trésorier</div></div>
-        <div class="actor-count">5</div>
-      </div>
-      <div class="actor-item" onclick="highlightActor('CM')">
-        <div class="actor-icon-wrap" style="color:var(--cCM);border-color:var(--cCM);background:rgba(56,189,248,.1)">📦</div>
-        <div><div class="actor-name">Resp. Matériel</div></div>
-        <div class="actor-count">4</div>
-      </div>
-      <div class="actor-item" onclick="highlightActor('A')">
-        <div class="actor-icon-wrap" style="color:var(--cA);border-color:var(--cA);background:rgba(244,112,90,.1)">🟡</div>
-        <div><div class="actor-name">Arbitre</div></div>
-        <div class="actor-count">4</div>
-      </div>
-      <div class="actor-item" onclick="highlightActor('F')">
-        <div class="actor-icon-wrap" style="color:var(--cF);border-color:var(--cF);background:rgba(136,146,164,.1)">🏛️</div>
-        <div><div class="actor-name">Fédération</div></div>
-        <div class="actor-count">6</div>
-      </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Relations UML</div>
-      <div class="rel-legend">
-        <div class="rel-item">
-          <div style="width:32px;height:2px;background:#4A90E2"></div>
-          <div class="rel-label">Association</div>
-        </div>
-        <div class="rel-item">
-          <div style="width:32px;border-top:2px dashed #52B788"></div>
-          <div class="rel-label">«include»</div>
-        </div>
-        <div class="rel-item">
-          <div style="width:32px;border-top:2px dashed #E8A430"></div>
-          <div class="rel-label">«extend»</div>
-        </div>
-        <div class="rel-item">
-          <div style="width:32px;border-top:2px dashed #A880F0"></div>
-          <div class="rel-label">Généralisation</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="sidebar-section">
-      <div class="sidebar-label">Navigation</div>
-      <div style="font-size:11px;color:var(--muted);line-height:1.7">
-        Scroll pour naviguer<br>
-        Cliquer acteur = filtrer<br>
-        Survol UC = détails<br>
-        Clic UC = description
-      </div>
-    </div>
-  </div>
-
-  <!-- CANVAS -->
-  <div class="canvas-wrap" id="canvasWrap">
-    <svg id="mainSvg" width="2400" height="1800" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <!-- Arrow markers -->
-        <marker id="arr-inc" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0,10 3.5,0 7" fill="#52B788" opacity="0.8"/>
-        </marker>
-        <marker id="arr-ext" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0,10 3.5,0 7" fill="#E8A430" opacity="0.8"/>
-        </marker>
-        <marker id="arr-open" markerWidth="12" markerHeight="8" refX="10" refY="4" orient="auto">
-          <polyline points="0,0 10,4 0,8" fill="none" stroke="#4A90E2" stroke-width="1.5" opacity="0.7"/>
-        </marker>
-        <marker id="arr-gen" markerWidth="12" markerHeight="10" refX="1" refY="5" orient="auto">
-          <polygon points="0 5,12 0,12 10" fill="none" stroke="#A880F0" stroke-width="1.5"/>
-        </marker>
-        <!-- Filters -->
-        <filter id="glow-J"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="glow-E"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.4)"/></filter>
-      </defs>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- SYSTEM BOUNDARY -->
-      <!-- ═══════════════════════════════════════════ -->
-      <rect x="370" y="40" width="1640" height="1720" rx="12"
-        fill="none" stroke="#1E2330" stroke-width="2" stroke-dasharray="8,4"/>
-      <text x="390" y="30" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700"
-        fill="#2A3040" letter-spacing="2">SYSTÈME — Application de Gestion du Club Sportif</text>
-
-      <!-- ═══════ SUBSYSTEM ZONES ═══════ -->
-      <!-- Zone Membres -->
-      <rect x="390" y="60" width="380" height="460" rx="8" fill="rgba(224,82,82,0.03)" stroke="rgba(224,82,82,0.12)" stroke-width="1"/>
-      <text x="405" y="85" font-family="JetBrains Mono,monospace" font-size="9" fill="#E05252" letter-spacing="2" opacity="0.7">ADHÉSION &amp; MEMBRES</text>
-
-      <!-- Zone Entraînements -->
-      <rect x="390" y="540" width="380" height="420" rx="8" fill="rgba(74,144,226,0.03)" stroke="rgba(74,144,226,0.12)" stroke-width="1"/>
-      <text x="405" y="562" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A90E2" letter-spacing="2" opacity="0.7">ENTRAÎNEMENTS</text>
-
-      <!-- Zone Compétitions -->
-      <rect x="800" y="60" width="400" height="460" rx="8" fill="rgba(82,183,136,0.03)" stroke="rgba(82,183,136,0.12)" stroke-width="1"/>
-      <text x="815" y="85" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" letter-spacing="2" opacity="0.7">COMPÉTITIONS &amp; LICENCES</text>
-
-      <!-- Zone Matériel -->
-      <rect x="390" y="980" width="380" height="360" rx="8" fill="rgba(56,189,248,0.03)" stroke="rgba(56,189,248,0.12)" stroke-width="1"/>
-      <text x="405" y="1002" font-family="JetBrains Mono,monospace" font-size="9" fill="#38BDF8" letter-spacing="2" opacity="0.7">MATÉRIEL &amp; ÉQUIPEMENTS</text>
-
-      <!-- Zone Finances -->
-      <rect x="800" y="540" width="400" height="420" rx="8" fill="rgba(168,128,240,0.03)" stroke="rgba(168,128,240,0.12)" stroke-width="1"/>
-      <text x="815" y="562" font-family="JetBrains Mono,monospace" font-size="9" fill="#A880F0" letter-spacing="2" opacity="0.7">FINANCES &amp; COTISATIONS</text>
-
-      <!-- Zone Résultats/Stats -->
-      <rect x="1230" y="60" width="360" height="900" rx="8" fill="rgba(244,112,90,0.03)" stroke="rgba(244,112,90,0.12)" stroke-width="1"/>
-      <text x="1245" y="85" font-family="JetBrains Mono,monospace" font-size="9" fill="#F4705A" letter-spacing="2" opacity="0.7">RÉSULTATS &amp; STATISTIQUES</text>
-
-      <!-- Zone Administration -->
-      <rect x="800" y="980" width="800" height="360" rx="8" fill="rgba(136,146,164,0.03)" stroke="rgba(136,146,164,0.12)" stroke-width="1"/>
-      <text x="815" y="1002" font-family="JetBrains Mono,monospace" font-size="9" fill="#8892A4" letter-spacing="2" opacity="0.7">ADMINISTRATION SYSTÈME</text>
-
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- USE CASES — ZONE ADHÉSION & MEMBRES -->
-      <!-- ═══════════════════════════════════════════ -->
-
-      <!-- UC: S'inscrire au club -->
-      <g class="uc-node" data-actor="J,P,SG" data-id="J01"
-         data-desc="Formulaire d'adhésion. Fournit CNI, photo, autorisation parentale si mineur. 100% papier actuellement."
-         data-title="S'inscrire au club">
-        <ellipse cx="580" cy="130" rx="110" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
-        <text x="580" y="135" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">S'inscrire au club</text>
-      </g>
-
-      <!-- UC: Fournir pièces justificatives (include) -->
-      <g class="uc-node" data-actor="J" data-id="J01a">
-        <ellipse cx="580" cy="210" rx="125" ry="24" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="580" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Fournir pièces justificatives</text>
-      </g>
-      <!-- include arrow J01 -> J01a -->
-      <line x1="580" y1="158" x2="580" y2="186" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="590" y="175" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-
-      <!-- UC: Autorisation parentale (extend) -->
-      <g class="uc-node" data-actor="J" data-id="J01b">
-        <ellipse cx="430" cy="210" rx="118" ry="24" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="430" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Autorisation parentale</text>
-      </g>
-      <line x1="540" y1="143" x2="440" y2="186" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
-      <text x="458" y="158" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
-
-      <!-- UC: Valider inscription -->
-      <g class="uc-node" data-actor="P,SG" data-id="P01"
-         data-desc="Président ou SG examine et approuve le dossier. Crée le compte officiel du membre."
-         data-title="Valider l'inscription d'un membre">
-        <ellipse cx="580" cy="295" rx="125" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
-        <text x="580" y="292" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Valider l'inscription</text>
-        <text x="580" y="307" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">d'un membre</text>
-      </g>
-
-      <!-- UC: Consulter son profil -->
-      <g class="uc-node" data-actor="J" data-id="J04"
-         data-desc="Accès au statut de licence, cotisation, équipe, sanctions actives, historique de présences."
-         data-title="Consulter son profil & statut">
-        <ellipse cx="580" cy="390" rx="125" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
-        <text x="580" y="387" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter son profil</text>
-        <text x="580" y="402" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">&amp; statut</text>
-      </g>
-
-      <!-- UC: Gérer les sanctions disciplinaires -->
-      <g class="uc-node" data-actor="P,SG" data-id="P04"
-         data-desc="Avertissements, suspensions internes pour impayés (Vigueur) ou manquements disciplinaires."
-         data-title="Gérer les sanctions disciplinaires">
-        <ellipse cx="580" cy="480" rx="125" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
-        <text x="580" y="477" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer les sanctions</text>
-        <text x="580" y="492" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">disciplinaires</text>
-      </g>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- USE CASES — ZONE ENTRAÎNEMENTS -->
-      <!-- ═══════════════════════════════════════════ -->
-
-      <!-- UC: Planifier un entraînement -->
-      <g class="uc-node" data-actor="E" data-id="E01"
-         data-desc="Date, heure, lieu, type de séance. 3x/semaine minimum. Planning fixe ou variable selon compétitions."
-         data-title="Planifier un entraînement">
-        <ellipse cx="580" cy="600" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
-        <text x="580" y="597" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Planifier un</text>
-        <text x="580" y="612" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">entraînement</text>
-      </g>
-      <!-- include: Réserver terrain -->
-      <g class="uc-node" data-actor="E" data-id="E01a">
-        <ellipse cx="440" cy="680" rx="100" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="440" y="685" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Réserver le terrain</text>
-      </g>
-      <line x1="547" y1="621" x2="472" y2="658" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="478" y="636" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-
-      <!-- UC: Annuler/reporter -->
-      <g class="uc-node" data-actor="E" data-id="E02"
-         data-desc="Annulation suite à indisponibilité du terrain. Notifie automatiquement les joueurs."
-         data-title="Annuler / reporter un entraînement">
-        <ellipse cx="580" cy="700" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
-        <text x="580" y="697" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Annuler / reporter</text>
-        <text x="580" y="712" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">un entraînement</text>
-      </g>
-
-      <!-- UC: Enregistrer présences -->
-      <g class="uc-node" data-actor="E" data-id="E03"
-         data-desc="Présents/absents. Vigueur: feuille papier. MSA: cahier. Gomido: aucun suivi actuel. Absences → suspension."
-         data-title="Enregistrer les présences">
-        <ellipse cx="580" cy="800" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
-        <text x="580" y="797" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Enregistrer</text>
-        <text x="580" y="812" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">les présences</text>
-      </g>
-      <!-- extend: Alerter absence -->
-      <g class="uc-node" data-actor="E" data-id="E03a">
-        <ellipse cx="430" cy="870" rx="110" ry="22" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="430" y="875" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Alerter absence répétée</text>
-      </g>
-      <line x1="549" y1="823" x2="484" y2="848" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
-      <text x="488" y="833" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
-
-      <!-- UC: Confirmer présence (joueur) -->
-      <g class="uc-node" data-actor="J" data-id="J03"
-         data-desc="Joueur signale sa disponibilité. Système vérifie cotisation (Vigueur) et appartenance à l'équipe."
-         data-title="Confirmer sa présence à un entraînement">
-        <ellipse cx="580" cy="920" rx="125" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
-        <text x="580" y="917" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Confirmer sa présence</text>
-        <text x="580" y="932" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">à un entraînement</text>
-      </g>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- USE CASES — ZONE MATÉRIEL -->
-      <!-- ═══════════════════════════════════════════ -->
-
-      <!-- UC: Tenir inventaire -->
-      <g class="uc-node" data-actor="CM,E" data-id="CM01"
-         data-desc="Enregistre équipements, état, emplacement. CM chez Gomido, entraîneur chez Vigueur & MSA."
-         data-title="Tenir l'inventaire du matériel">
-        <ellipse cx="580" cy="1050" rx="125" ry="28" fill="#13161E" stroke="#38BDF8" stroke-width="1.5"/>
-        <text x="580" y="1047" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Tenir l'inventaire</text>
-        <text x="580" y="1062" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">du matériel</text>
-      </g>
-
-      <!-- UC: Emprunter équipement -->
-      <g class="uc-node" data-actor="J,CM,E" data-id="J06"
-         data-desc="Demande de prêt de matériel. CM chez Gomido, entraîneur chez Vigueur & MSA. Système trace le prêt."
-         data-title="Emprunter un équipement">
-        <ellipse cx="580" cy="1150" rx="125" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
-        <text x="580" y="1147" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Emprunter un</text>
-        <text x="580" y="1162" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">équipement</text>
-      </g>
-      <!-- include: Vérifier dispo -->
-      <g class="uc-node" data-actor="CM" data-id="CM02a">
-        <ellipse cx="430" cy="1215" rx="105" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="430" y="1220" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Vérifier disponibilité</text>
-      </g>
-      <line x1="551" y1="1172" x2="486" y2="1193" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="494" y="1182" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-
-      <!-- UC: Retour équipement -->
-      <g class="uc-node" data-actor="CM,E" data-id="CM03"
-         data-desc="Réception, contrôle état, clôture du prêt. Signale tout dommage au Trésorier."
-         data-title="Enregistrer le retour d'équipement">
-        <ellipse cx="580" cy="1280" rx="125" ry="28" fill="#13161E" stroke="#38BDF8" stroke-width="1.5"/>
-        <text x="580" y="1277" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Enregistrer le retour</text>
-        <text x="580" y="1292" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">d'équipement</text>
-      </g>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- USE CASES — ZONE COMPÉTITIONS & LICENCES -->
-      <!-- ═══════════════════════════════════════════ -->
-
-      <!-- UC: Gérer licences fédérales -->
-      <g class="uc-node" data-actor="SG,P" data-id="SG02"
-         data-desc="SG (Vigueur, Gomido) ou Président (MSA). Gomido: via febefoot connect. Suivi renouvellements."
-         data-title="Gérer les licences fédérales">
-        <ellipse cx="1000" cy="130" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
-        <text x="1000" y="127" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer les licences</text>
-        <text x="1000" y="142" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">fédérales</text>
-      </g>
-      <!-- include: Soumettre dossier -->
-      <g class="uc-node" data-actor="SG" data-id="SG02a">
-        <ellipse cx="860" cy="210" rx="110" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="860" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Soumettre dossier FBF</text>
-      </g>
-      <line x1="958" y1="153" x2="903" y2="188" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="910" y="167" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-
-      <!-- extend: Alerter licence -->
-      <g class="uc-node" data-actor="SG" data-id="SG02b">
-        <ellipse cx="1100" cy="210" rx="115" ry="22" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="1100" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Alerter licence expirante</text>
-      </g>
-      <line x1="1048" y1="153" x2="1075" y2="188" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
-      <text x="1050" y="167" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
-
-      <!-- UC: Inscrire club à compétition -->
-      <g class="uc-node" data-actor="SG,P" data-id="SG04"
-         data-desc="Rassemble et soumet documents FBF. Gomido: cotisation annuelle FBF = clé d'accès aux compétitions."
-         data-title="Inscrire le club à une compétition">
-        <ellipse cx="1000" cy="295" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
-        <text x="1000" y="292" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Inscrire le club</text>
-        <text x="1000" y="307" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">à une compétition</text>
-      </g>
-
-      <!-- UC: Sélectionner joueurs pour match -->
-      <g class="uc-node" data-actor="E" data-id="E04"
-         data-desc="Selon performance (Vigueur), décision technique (MSA), sélectionneur (Gomido). Vérifie éligibilité."
-         data-title="Sélectionner les joueurs pour un match">
-        <ellipse cx="1000" cy="390" rx="130" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
-        <text x="1000" y="387" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Sélectionner joueurs</text>
-        <text x="1000" y="402" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">pour un match</text>
-      </g>
-      <!-- include: Vérifier éligibilité -->
-      <g class="uc-node" data-actor="E" data-id="E04a">
-        <ellipse cx="875" cy="460" rx="110" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="875" y="465" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Vérifier éligibilité joueur</text>
-      </g>
-      <line x1="960" y1="413" x2="920" y2="438" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="920" y="424" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-
-      <!-- UC: Produire liste officielle match -->
-      <g class="uc-node" data-actor="SG" data-id="SG03"
-         data-desc="Après sélection par le coach, le SG produit la liste avec numéros de licence. Soumise à l'arbitre."
-         data-title="Produire la liste officielle de match">
-        <ellipse cx="1000" cy="490" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
-        <text x="1000" y="487" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Produire liste officielle</text>
-        <text x="1000" y="502" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de match</text>
-      </g>
-      <!-- include: Vérifier licences liste -->
-      <g class="uc-node" data-actor="SG" data-id="SG03a">
-        <ellipse cx="1130" cy="460" rx="115" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="1130" y="465" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Vérifier licences sélectionnés</text>
-      </g>
-      <line x1="1048" y1="476" x2="1082" y2="455" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="1052" y="463" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- USE CASES — ZONE FINANCES -->
-      <!-- ═══════════════════════════════════════════ -->
-
-      <!-- UC: Enregistrer paiement cotisation -->
-      <g class="uc-node" data-actor="T,J" data-id="T01"
-         data-desc="Trésorier saisit versements (espèces ou Mobile Money), émet reçus. 100% papier actuellement."
-         data-title="Enregistrer un paiement de cotisation">
-        <ellipse cx="1000" cy="600" rx="130" ry="28" fill="#13161E" stroke="#A880F0" stroke-width="1.5"/>
-        <text x="1000" y="597" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Enregistrer paiement</text>
-        <text x="1000" y="612" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de cotisation</text>
-      </g>
-      <!-- include: Générer reçu -->
-      <g class="uc-node" data-actor="T" data-id="T01a">
-        <ellipse cx="860" cy="680" rx="100" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="860" y="685" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Générer reçu paiement</text>
-      </g>
-      <line x1="958" y1="622" x2="905" y2="658" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="912" y="637" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-
-      <!-- UC: Suivre les impayés -->
-      <g class="uc-node" data-actor="T" data-id="T02"
-         data-desc="Identifie membres en retard. Vigueur: suspension entraînements. MSA/Gomido: aucune conséquence actuelle."
-         data-title="Suivre les impayés">
-        <ellipse cx="1000" cy="720" rx="130" ry="28" fill="#13161E" stroke="#A880F0" stroke-width="1.5"/>
-        <text x="1000" y="725" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Suivre les impayés</text>
-      </g>
-      <!-- extend: Suspendre accès -->
-      <g class="uc-node" data-actor="T" data-id="T02a">
-        <ellipse cx="1130" cy="680" rx="110" ry="22" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="1130" y="685" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Suspendre accès impayé</text>
-      </g>
-      <line x1="1048" y1="702" x2="1096" y2="680" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
-      <text x="1058" y="688" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
-
-      <!-- UC: Gérer budget -->
-      <g class="uc-node" data-actor="T" data-id="T03"
-         data-desc="Recettes (cotisations, subventions) et dépenses (matériel, déplacements, arbitrage, inscriptions)."
-         data-title="Gérer le budget du club">
-        <ellipse cx="1000" cy="800" rx="130" ry="28" fill="#13161E" stroke="#A880F0" stroke-width="1.5"/>
-        <text x="1000" y="797" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer le budget</text>
-        <text x="1000" y="812" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">du club</text>
-      </g>
-
-      <!-- UC: Commander équipements -->
-      <g class="uc-node" data-actor="T,CM" data-id="T05"
-         data-desc="Commande matériel auprès fournisseurs. Réception et enregistrement en inventaire."
-         data-title="Commander des équipements">
-        <ellipse cx="1000" cy="900" rx="130" ry="28" fill="#13161E" stroke="#A880F0" stroke-width="1.5"/>
-        <text x="1000" y="897" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Commander des</text>
-        <text x="1000" y="912" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">équipements</text>
-      </g>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- USE CASES — ZONE RÉSULTATS & STATS -->
-      <!-- ═══════════════════════════════════════════ -->
-
-      <!-- UC: Valider feuille de match (Arbitre) -->
-      <g class="uc-node" data-actor="A" data-id="A01"
-         data-desc="Vérifie licences avant coup d'envoi. SG soumet liste avec numéros de licence à l'arbitre."
-         data-title="Valider la feuille de match">
-        <ellipse cx="1400" cy="130" rx="125" ry="28" fill="#13161E" stroke="#F4705A" stroke-width="1.5"/>
-        <text x="1400" y="127" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Valider la feuille</text>
-        <text x="1400" y="142" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de match</text>
-      </g>
-      <!-- include: Vérifier licences -->
-      <g class="uc-node" data-actor="A" data-id="A01a">
-        <ellipse cx="1290" cy="210" rx="100" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="1290" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Vérifier licences joueurs</text>
-      </g>
-      <line x1="1367" y1="153" x2="1325" y2="188" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="1320" y="167" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-      <!-- extend: Refuser joueur -->
-      <g class="uc-node" data-actor="A" data-id="A01b">
-        <ellipse cx="1500" cy="210" rx="100" ry="22" fill="#0C0E13" stroke="#E8A430" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="1500" y="215" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Refuser joueur non conforme</text>
-      </g>
-      <line x1="1435" y1="153" x2="1468" y2="188" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-ext)" opacity="0.7"/>
-      <text x="1436" y="167" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430" opacity="0.8">«extend»</text>
-
-      <!-- UC: Saisir résultat match -->
-      <g class="uc-node" data-actor="A,E" data-id="A02"
-         data-desc="Score final, buteurs, cartons. Déclenche mise à jour classement FBF. Remplace feuille papier."
-         data-title="Saisir le résultat du match">
-        <ellipse cx="1400" cy="310" rx="125" ry="28" fill="#13161E" stroke="#F4705A" stroke-width="1.5"/>
-        <text x="1400" y="307" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Saisir le résultat</text>
-        <text x="1400" y="322" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">du match</text>
-      </g>
-      <!-- include: Mettre à jour classement -->
-      <g class="uc-node" data-actor="A" data-id="A02a">
-        <ellipse cx="1400" cy="395" rx="115" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="1400" y="400" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Mettre à jour classement</text>
-      </g>
-      <line x1="1400" y1="338" x2="1400" y2="373" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="1410" y="358" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-
-      <!-- UC: Gérer cartons/suspensions -->
-      <g class="uc-node" data-actor="A" data-id="A03"
-         data-desc="Cartons distribués → calcul automatique suspensions selon barème FBF → notification SG."
-         data-title="Gérer cartons & suspensions">
-        <ellipse cx="1400" cy="490" rx="125" ry="28" fill="#13161E" stroke="#F4705A" stroke-width="1.5"/>
-        <text x="1400" y="487" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer cartons</text>
-        <text x="1400" y="502" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">&amp; suspensions</text>
-      </g>
-      <!-- include: Calcul suspension -->
-      <g class="uc-node" data-actor="A" data-id="A03a">
-        <ellipse cx="1520" cy="570" rx="105" ry="22" fill="#0C0E13" stroke="#52B788" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
-        <text x="1520" y="575" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" fill="#8892A4">Calculer suspension auto</text>
-      </g>
-      <line x1="1445" y1="514" x2="1488" y2="548" stroke="#52B788" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-inc)" opacity="0.7"/>
-      <text x="1448" y="530" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788" opacity="0.8">«include»</text>
-
-      <!-- UC: Saisir statistiques match -->
-      <g class="uc-node" data-actor="E" data-id="E06"
-         data-desc="Buts, cartons, présences après chaque rencontre. Alimente profils joueurs et décisions de sélection."
-         data-title="Saisir les statistiques de match">
-        <ellipse cx="1400" cy="650" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
-        <text x="1400" y="647" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Saisir statistiques</text>
-        <text x="1400" y="662" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de match</text>
-      </g>
-
-      <!-- UC: Consulter stats & résultats (Joueur) -->
-      <g class="uc-node" data-actor="J" data-id="J07"
-         data-desc="Performances (présences, buts, cartons, sélections) et résultats de l'équipe. Inexistant actuellement."
-         data-title="Consulter ses statistiques & résultats">
-        <ellipse cx="1400" cy="750" rx="125" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
-        <text x="1400" y="747" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter ses statistiques</text>
-        <text x="1400" y="762" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">&amp; résultats</text>
-      </g>
-
-      <!-- UC: Consulter calendrier désignation (Arbitre) -->
-      <g class="uc-node" data-actor="A" data-id="A04"
-         data-desc="Matchs attribués par la FBF avec dates, lieux, équipes. Désignation par fédération (Vigueur, MSA)."
-         data-title="Consulter calendrier de désignation">
-        <ellipse cx="1400" cy="850" rx="125" ry="28" fill="#13161E" stroke="#F4705A" stroke-width="1.5"/>
-        <text x="1400" y="847" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter calendrier</text>
-        <text x="1400" y="862" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de désignation</text>
-      </g>
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- USE CASES — ZONE ADMINISTRATION -->
-      <!-- ═══════════════════════════════════════════ -->
-
-      <!-- UC: Créer/gérer une équipe -->
-      <g class="uc-node" data-actor="P,E" data-id="P02"
-         data-desc="Président (Vigueur, Gomido) ou Entraîneur (MSA). Catégorie, effectif min/max (18-25 Vigueur, 18-32 Gomido)."
-         data-title="Créer / gérer une équipe">
-        <ellipse cx="900" cy="1060" rx="125" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
-        <text x="900" y="1057" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Créer / gérer</text>
-        <text x="900" y="1072" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">une équipe</text>
-      </g>
-
-      <!-- UC: Consulter tableau de bord -->
-      <g class="uc-node" data-actor="P" data-id="P05"
-         data-desc="Vue exécutive: effectif actif, licences en cours, finances, prochaines compétitions, état stock."
-         data-title="Consulter le tableau de bord global">
-        <ellipse cx="1100" cy="1060" rx="130" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
-        <text x="1100" y="1057" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter tableau</text>
-        <text x="1100" y="1072" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">de bord global</text>
-      </g>
-
-      <!-- UC: Affecter joueur à une équipe -->
-      <g class="uc-node" data-actor="E" data-id="E05"
-         data-desc="Affecte selon âge, niveau, poste. Junior performant peut rejoindre seniors (Vigueur, Gomido)."
-         data-title="Affecter un joueur à une équipe">
-        <ellipse cx="1310" cy="1060" rx="125" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
-        <text x="1310" y="1057" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Affecter un joueur</text>
-        <text x="1310" y="1072" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">à une équipe</text>
-      </g>
-
-      <!-- UC: Planifier consultaion calendrier compétitions -->
-      <g class="uc-node" data-actor="E" data-id="E08"
-         data-desc="Visualise prochains matchs pour adapter son planning. MSA: planning variable selon compétitions."
-         data-title="Consulter le calendrier des compétitions">
-        <ellipse cx="1505" cy="1060" rx="130" ry="28" fill="#13161E" stroke="#4A90E2" stroke-width="1.5"/>
-        <text x="1505" y="1057" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter calendrier</text>
-        <text x="1505" y="1072" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">des compétitions</text>
-      </g>
-
-      <!-- UC: Enregistrer sanctions fédérales -->
-      <g class="uc-node" data-actor="SG" data-id="SG05"
-         data-desc="Reçoit notifications suspension FBF (cartons), intègre dans système, notifie entraîneur et joueur."
-         data-title="Enregistrer les sanctions fédérales">
-        <ellipse cx="900" cy="1185" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
-        <text x="900" y="1182" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Enregistrer sanctions</text>
-        <text x="900" y="1197" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">fédérales</text>
-      </g>
-
-      <!-- UC: Consulter planning entraînement -->
-      <g class="uc-node" data-actor="J" data-id="J05"
-         data-desc="Visualise séances à venir. Remplace WhatsApp/SMS et réunions physiques actuellement pratiqués."
-         data-title="Consulter le planning d'entraînement">
-        <ellipse cx="1110" cy="1185" rx="130" ry="28" fill="#13161E" stroke="#E05252" stroke-width="1.5"/>
-        <text x="1110" y="1182" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Consulter le planning</text>
-        <text x="1110" y="1197" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">d'entraînement</text>
-      </g>
-
-      <!-- UC: Réserver terrain -->
-      <g class="uc-node" data-actor="P,SG,E" data-id="D10"
-         data-desc="Vigueur: contrat permanent. MSA: selon dispo stade. Gomido: chronogramme avec gestionnaire."
-         data-title="Réserver un terrain / une salle">
-        <ellipse cx="1340" cy="1185" rx="130" ry="28" fill="#13161E" stroke="#52B788" stroke-width="1.5"/>
-        <text x="1340" y="1182" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Réserver un terrain</text>
-        <text x="1340" y="1197" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">/ une salle</text>
-      </g>
-
-      <!-- UC: Gérer les dossiers membres -->
-      <g class="uc-node" data-actor="SG" data-id="SG01"
-         data-desc="Archive dossiers inscription (CNI, certificat médical, photo). Tient registre officiel des membres actifs."
-         data-title="Gérer les dossiers des membres">
-        <ellipse cx="1530" cy="1185" rx="130" ry="28" fill="#13161E" stroke="#E8A430" stroke-width="1.5"/>
-        <text x="1530" y="1182" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Gérer les dossiers</text>
-        <text x="1530" y="1197" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">des membres</text>
-      </g>
-
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- FÉDÉRATION USE CASES (external zone) -->
-      <!-- ═══════════════════════════════════════════ -->
-      <rect x="1640" y="350" width="340" height="580" rx="8" fill="none" stroke="#2A3040" stroke-width="1.5" stroke-dasharray="6,3"/>
-      <text x="1660" y="375" font-family="JetBrains Mono,monospace" font-size="9" fill="#5A6070" letter-spacing="2">FÉDÉRATION (externe)</text>
-
-      <g class="uc-node" data-actor="F" data-id="F01"
-         data-desc="FBF valide dossiers. Gomido via febefoot connect. Vérification systématique avant compétition."
-         data-title="Délivrer / valider une licence">
-        <ellipse cx="1810" cy="420" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
-        <text x="1810" y="417" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Délivrer / valider</text>
-        <text x="1810" y="432" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">une licence</text>
-      </g>
-      <g class="uc-node" data-actor="F" data-id="F02"
-         data-desc="Confirme participation après vérification droits acquittés et conformité administrative."
-         data-title="Valider inscription championnat">
-        <ellipse cx="1810" cy="510" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
-        <text x="1810" y="507" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Valider inscription</text>
-        <text x="1810" y="522" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">championnat</text>
-      </g>
-      <g class="uc-node" data-actor="F" data-id="F03"
-         data-desc="Diffuse calendrier officiel. MSA s'y réfère pour adapter planning entraînements."
-         data-title="Publier calendrier des compétitions">
-        <ellipse cx="1810" cy="600" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
-        <text x="1810" y="597" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Publier calendrier</text>
-        <text x="1810" y="612" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">des compétitions</text>
-      </g>
-      <g class="uc-node" data-actor="F" data-id="F04"
-         data-desc="Vigueur & MSA: FBF uniquement. Gomido: les deux parties selon type de compétition."
-         data-title="Désigner les arbitres">
-        <ellipse cx="1810" cy="690" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
-        <text x="1810" y="695" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Désigner les arbitres</text>
-      </g>
-      <g class="uc-node" data-actor="F" data-id="F05"
-         data-desc="Calcule et publie classement national. Les 3 clubs confirment ce rôle central de la FBF."
-         data-title="Mettre à jour le classement général">
-        <ellipse cx="1810" cy="780" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
-        <text x="1810" y="777" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Mettre à jour</text>
-        <text x="1810" y="792" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">classement général</text>
-      </g>
-      <g class="uc-node" data-actor="F" data-id="F06"
-         data-desc="Vérifie validité certificats médicaux avant attribution/renouvellement licence. Unanime 3 clubs."
-         data-title="Contrôler les certificats médicaux">
-        <ellipse cx="1810" cy="870" rx="125" ry="28" fill="#0C0E13" stroke="#8892A4" stroke-width="1.5"/>
-        <text x="1810" y="867" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">Contrôler certificats</text>
-        <text x="1810" y="882" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="600" fill="#E8ECF4">médicaux</text>
-      </g>
-
-
-      <!-- ═══════════════════════════════════════════ -->
-      <!-- ACTORS — LEFT SIDE -->
-      <!-- ═══════════════════════════════════════════ -->
-
-      <!-- JOUEUR -->
-      <g id="actor-J">
-        <ellipse cx="130" cy="52" rx="18" ry="18" fill="none" stroke="#E05252" stroke-width="2"/>
-        <line x1="130" y1="70" x2="130" y2="105" stroke="#E05252" stroke-width="2"/>
-        <line x1="105" y1="82" x2="155" y2="82" stroke="#E05252" stroke-width="2"/>
-        <line x1="130" y1="105" x2="108" y2="130" stroke="#E05252" stroke-width="2"/>
-        <line x1="130" y1="105" x2="152" y2="130" stroke="#E05252" stroke-width="2"/>
-        <text x="130" y="148" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#E05252">Joueur</text>
-        <!-- associations -->
-        <line x1="148" y1="80" x2="470" y2="130" stroke="#E05252" stroke-width="1.5" opacity="0.5" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="90" x2="456" y2="295" stroke="#E05252" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="95" x2="456" y2="390" stroke="#E05252" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="100" x2="456" y2="600" stroke="#E05252" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="100" x2="456" y2="920" stroke="#E05252" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="105" x2="456" y2="1150" stroke="#E05252" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="105" x2="870" y2="600" stroke="#E05252" stroke-width="1.5" opacity="0.25" marker-end="url(#arr-open)"/>
-      </g>
-
-      <!-- ENTRAÎNEUR -->
-      <g id="actor-E">
-        <ellipse cx="130" cy="552" rx="18" ry="18" fill="none" stroke="#4A90E2" stroke-width="2"/>
-        <line x1="130" y1="570" x2="130" y2="605" stroke="#4A90E2" stroke-width="2"/>
-        <line x1="105" y1="582" x2="155" y2="582" stroke="#4A90E2" stroke-width="2"/>
-        <line x1="130" y1="605" x2="108" y2="630" stroke="#4A90E2" stroke-width="2"/>
-        <line x1="130" y1="605" x2="152" y2="630" stroke="#4A90E2" stroke-width="2"/>
-        <text x="130" y="648" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#4A90E2">Entraîneur</text>
-        <line x1="148" y1="570" x2="456" y2="600" stroke="#4A90E2" stroke-width="1.5" opacity="0.5" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="575" x2="456" y2="700" stroke="#4A90E2" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="580" x2="456" y2="800" stroke="#4A90E2" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="585" x2="875" y2="390" stroke="#4A90E2" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="585" x2="875" y2="490" stroke="#4A90E2" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="590" x2="1275" y2="650" stroke="#4A90E2" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="590" x2="1185" y2="1060" stroke="#4A90E2" stroke-width="1.5" opacity="0.25" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="590" x2="1380" y2="1060" stroke="#4A90E2" stroke-width="1.5" opacity="0.25" marker-end="url(#arr-open)"/>
-      </g>
-
-      <!-- ═══ ACTORS RIGHT SIDE ═══ -->
-
-      <!-- PRÉSIDENT -->
-      <g id="actor-P">
-        <ellipse cx="2260" cy="295" rx="18" ry="18" fill="none" stroke="#52B788" stroke-width="2"/>
-        <line x1="2260" y1="313" x2="2260" y2="348" stroke="#52B788" stroke-width="2"/>
-        <line x1="2235" y1="325" x2="2285" y2="325" stroke="#52B788" stroke-width="2"/>
-        <line x1="2260" y1="348" x2="2238" y2="373" stroke="#52B788" stroke-width="2"/>
-        <line x1="2260" y1="348" x2="2282" y2="373" stroke="#52B788" stroke-width="2"/>
-        <text x="2260" y="390" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#52B788">Président</text>
-        <line x1="2242" y1="310" x2="706" y2="130" stroke="#52B788" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="315" x2="706" y2="295" stroke="#52B788" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="318" x2="706" y2="480" stroke="#52B788" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="320" x2="1025" y2="130" stroke="#52B788" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="322" x2="1025" y2="295" stroke="#52B788" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="322" x2="1025" y2="1060" stroke="#52B788" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="322" x2="1230" y2="1060" stroke="#52B788" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
-      </g>
-
-      <!-- SECRÉTAIRE GÉNÉRAL -->
-      <g id="actor-SG">
-        <ellipse cx="2260" cy="620" rx="18" ry="18" fill="none" stroke="#E8A430" stroke-width="2"/>
-        <line x1="2260" y1="638" x2="2260" y2="673" stroke="#E8A430" stroke-width="2"/>
-        <line x1="2235" y1="650" x2="2285" y2="650" stroke="#E8A430" stroke-width="2"/>
-        <line x1="2260" y1="673" x2="2238" y2="698" stroke="#E8A430" stroke-width="2"/>
-        <line x1="2260" y1="673" x2="2282" y2="698" stroke="#E8A430" stroke-width="2"/>
-        <text x="2260" y="718" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#E8A430">Secrétaire</text>
-        <text x="2260" y="732" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#E8A430">Général</text>
-        <line x1="2242" y1="635" x2="706" y2="295" stroke="#E8A430" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="638" x2="1025" y2="130" stroke="#E8A430" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="641" x2="1025" y2="295" stroke="#E8A430" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="644" x2="1025" y2="490" stroke="#E8A430" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="647" x2="1025" y2="1185" stroke="#E8A430" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="650" x2="1275" y2="1185" stroke="#E8A430" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="652" x2="1530" y2="1185" stroke="#E8A430" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
-      </g>
-
-      <!-- TRÉSORIER -->
-      <g id="actor-T">
-        <ellipse cx="2260" cy="870" rx="18" ry="18" fill="none" stroke="#A880F0" stroke-width="2"/>
-        <line x1="2260" y1="888" x2="2260" y2="923" stroke="#A880F0" stroke-width="2"/>
-        <line x1="2235" y1="900" x2="2285" y2="900" stroke="#A880F0" stroke-width="2"/>
-        <line x1="2260" y1="923" x2="2238" y2="948" stroke="#A880F0" stroke-width="2"/>
-        <line x1="2260" y1="923" x2="2282" y2="948" stroke="#A880F0" stroke-width="2"/>
-        <text x="2260" y="965" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#A880F0">Trésorier</text>
-        <line x1="2242" y1="882" x2="1130" y2="600" stroke="#A880F0" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="886" x2="1130" y2="720" stroke="#A880F0" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="890" x2="1130" y2="800" stroke="#A880F0" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="894" x2="1130" y2="900" stroke="#A880F0" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="898" x2="706" y2="1150" stroke="#A880F0" stroke-width="1.5" opacity="0.3" marker-end="url(#arr-open)"/>
-      </g>
-
-      <!-- RESP. MATÉRIEL -->
-      <g id="actor-CM">
-        <ellipse cx="130" cy="1150" rx="18" ry="18" fill="none" stroke="#38BDF8" stroke-width="2"/>
-        <line x1="130" y1="1168" x2="130" y2="1203" stroke="#38BDF8" stroke-width="2"/>
-        <line x1="105" y1="1180" x2="155" y2="1180" stroke="#38BDF8" stroke-width="2"/>
-        <line x1="130" y1="1203" x2="108" y2="1228" stroke="#38BDF8" stroke-width="2"/>
-        <line x1="130" y1="1203" x2="152" y2="1228" stroke="#38BDF8" stroke-width="2"/>
-        <text x="130" y="1246" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#38BDF8">Resp.</text>
-        <text x="130" y="1260" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#38BDF8">Matériel</text>
-        <line x1="148" y1="1155" x2="456" y2="1050" stroke="#38BDF8" stroke-width="1.5" opacity="0.5" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="1158" x2="456" y2="1150" stroke="#38BDF8" stroke-width="1.5" opacity="0.5" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="1162" x2="456" y2="1280" stroke="#38BDF8" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
-        <line x1="148" y1="1165" x2="870" y2="900" stroke="#38BDF8" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
-      </g>
-
-      <!-- ARBITRE -->
-      <g id="actor-A">
-        <ellipse cx="2260" cy="490" rx="18" ry="18" fill="none" stroke="#F4705A" stroke-width="2"/>
-        <line x1="2260" y1="508" x2="2260" y2="543" stroke="#F4705A" stroke-width="2"/>
-        <line x1="2235" y1="520" x2="2285" y2="520" stroke="#F4705A" stroke-width="2"/>
-        <line x1="2260" y1="543" x2="2238" y2="568" stroke="#F4705A" stroke-width="2"/>
-        <line x1="2260" y1="543" x2="2282" y2="568" stroke="#F4705A" stroke-width="2"/>
-        <text x="2260" y="585" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#F4705A">Arbitre</text>
-        <line x1="2242" y1="503" x2="1525" y2="130" stroke="#F4705A" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="507" x2="1525" y2="310" stroke="#F4705A" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="511" x2="1525" y2="490" stroke="#F4705A" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="515" x2="1525" y2="850" stroke="#F4705A" stroke-width="1.5" opacity="0.35" marker-end="url(#arr-open)"/>
-      </g>
-
-      <!-- FÉDÉRATION -->
-      <g id="actor-F">
-        <ellipse cx="2260" cy="750" rx="18" ry="18" fill="none" stroke="#8892A4" stroke-width="2"/>
-        <line x1="2260" y1="768" x2="2260" y2="803" stroke="#8892A4" stroke-width="2"/>
-        <line x1="2235" y1="780" x2="2285" y2="780" stroke="#8892A4" stroke-width="2"/>
-        <line x1="2260" y1="803" x2="2238" y2="828" stroke="#8892A4" stroke-width="2"/>
-        <line x1="2260" y1="803" x2="2282" y2="828" stroke="#8892A4" stroke-width="2"/>
-        <text x="2260" y="845" text-anchor="middle" font-family="Bricolage Grotesque" font-size="12" font-weight="700" fill="#8892A4">Fédération</text>
-        <text x="2260" y="859" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" fill="#5A6070">(FBF)</text>
-        <line x1="2242" y1="763" x2="1935" y2="420" stroke="#8892A4" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="767" x2="1935" y2="510" stroke="#8892A4" stroke-width="1.5" opacity="0.45" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="771" x2="1935" y2="600" stroke="#8892A4" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="775" x2="1935" y2="690" stroke="#8892A4" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="779" x2="1935" y2="780" stroke="#8892A4" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-        <line x1="2242" y1="783" x2="1935" y2="870" stroke="#8892A4" stroke-width="1.5" opacity="0.4" marker-end="url(#arr-open)"/>
-      </g>
-
-      <!-- ═══ TITLE ═══ -->
-      <rect x="370" y="1730" width="1640" height="55" fill="#13161E" rx="0 0 12 12"/>
-      <text x="1190" y="1760" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#3A4050">Diagramme de Cas d'Utilisation — Gestion Club Sportif Bénin</text>
-      <text x="1190" y="1776" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#2A3040">8 acteurs · 46 cas d'utilisation · Basé sur enquête terrain (Vigueur FC, MSA, AS Gomido)</text>
-
-    </svg>
-  </div>
+<div class="sidebar">
+  <div class="sl">Classes (12)</div>
+  <div class="ci" onclick="hl('Membre')"><div class="cd" style="background:#E05252"></div><div class="cn" style="color:#E05252">Membre</div></div>
+  <div class="ci" onclick="hl('Joueur')"><div class="cd" style="background:#EF8070"></div><div class="cn" style="color:#EF8070">Joueur</div></div>
+  <div class="ci" onclick="hl('Entraineur')"><div class="cd" style="background:#4A90E2"></div><div class="cn" style="color:#4A90E2">Entraîneur</div></div>
+  <div class="ci" onclick="hl('Equipe')"><div class="cd" style="background:#52B788"></div><div class="cn" style="color:#52B788">Equipe</div></div>
+  <div class="ci" onclick="hl('Entrainement')"><div class="cd" style="background:#38BDF8"></div><div class="cn" style="color:#38BDF8">Entraînement</div></div>
+  <div class="ci" onclick="hl('Competition')"><div class="cd" style="background:#E8A430"></div><div class="cn" style="color:#E8A430">Compétition</div></div>
+  <div class="ci" onclick="hl('Licence')"><div class="cd" style="background:#A880F0"></div><div class="cn" style="color:#A880F0">Licence</div></div>
+  <div class="ci" onclick="hl('Cotisation')"><div class="cd" style="background:#F472B6"></div><div class="cn" style="color:#F472B6">Cotisation</div></div>
+  <div class="ci" onclick="hl('Equipement')"><div class="cd" style="background:#F4705A"></div><div class="cn" style="color:#F4705A">Equipement</div></div>
+  <div class="ci" onclick="hl('Pret')"><div class="cd" style="background:#FB923C"></div><div class="cn" style="color:#FB923C">Prêt</div></div>
+  <div class="ci" onclick="hl('Resultat')"><div class="cd" style="background:#84CC16"></div><div class="cn" style="color:#84CC16">Résultat</div></div>
+  <div class="ci" onclick="hl('Sanction')"><div class="cd" style="background:#8892A4"></div><div class="cn" style="color:#8892A4">Sanction</div></div>
+
+  <div class="sl">Relations</div>
+  <div class="leg"><svg class="ll" width="34" height="12"><line x1="2" y1="6" x2="32" y2="6" stroke="#E2E8F4" stroke-width="2"/><polygon points="2,2 2,10 0,6" fill="#E2E8F4"/></svg><div class="lt">Héritage</div></div>
+  <div class="leg"><svg class="ll" width="34" height="12"><line x1="2" y1="6" x2="32" y2="6" stroke="#4A90E2" stroke-width="1.5"/><polygon points="32,2 32,10 34,6" fill="none" stroke="#4A90E2" stroke-width="1.5"/></svg><div class="lt">Association</div></div>
+  <div class="leg"><svg class="ll" width="34" height="12"><line x1="2" y1="6" x2="32" y2="6" stroke="#52B788" stroke-width="1.5"/><polygon points="30,2 30,10 34,6" fill="#52B788"/></svg><div class="lt">Composition</div></div>
+  <div class="leg"><svg class="ll" width="34" height="12"><line x1="2" y1="6" x2="32" y2="6" stroke="#E8A430" stroke-width="1.5" stroke-dasharray="4,2"/><polygon points="30,2 30,10 34,6" fill="none" stroke="#E8A430" stroke-width="1.5"/></svg><div class="lt">Agrégation</div></div>
+
+  <div class="sl">Aide</div>
+  <div style="font-size:10.5px;color:var(--muted);line-height:1.8">Survol → détails<br>Clic sidebar → focus<br>Scroll → naviguer</div>
 </div>
 
-<!-- TOOLTIP -->
-<div class="tooltip" id="tooltip">
-  <div class="tt-actor" id="tt-actor"></div>
-  <div class="tt-uc" id="tt-uc"></div>
-  <div class="tt-desc" id="tt-desc"></div>
+<div class="cw" id="cw">
+<svg id="svg" width="3000" height="1900" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <!-- Héritage (triangle vide vers parent) -->
+  <marker id="mh" markerWidth="12" markerHeight="10" refX="11" refY="5" orient="auto">
+    <polygon points="0,0 0,10 11,5" fill="#0B0D11" stroke="#C0C8D8" stroke-width="1.5"/>
+  </marker>
+  <!-- Association (flèche ouverte) -->
+  <marker id="ma" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+    <polyline points="0,0 9,4 0,8" fill="none" stroke="#4A90E2" stroke-width="1.5"/>
+  </marker>
+  <!-- Composition (losange plein) -->
+  <marker id="mc" markerWidth="14" markerHeight="8" refX="1" refY="4" orient="auto">
+    <polygon points="0,4 4,0 8,4 4,8" fill="#52B788"/>
+  </marker>
+  <!-- Agrégation (losange vide) -->
+  <marker id="mg" markerWidth="14" markerHeight="8" refX="1" refY="4" orient="auto">
+    <polygon points="0,4 4,0 8,4 4,8" fill="#0B0D11" stroke="#E8A430" stroke-width="1.3"/>
+  </marker>
+  <!-- flèche simple -->
+  <marker id="ms" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+    <polyline points="0,0 9,4 0,8" fill="none" stroke="#5A6478" stroke-width="1.3"/>
+  </marker>
+</defs>
+
+<!-- ═══════════════════════════════════════════════════
+     HELPER: each class box = header + attrs + methods
+     Colors per class, dark fill
+═══════════════════════════════════════════════════════ -->
+
+<!-- ┌─────────────────────────────────────────────────┐
+     │  MEMBRE  (abstract)  — top-center               │
+     └─────────────────────────────────────────────────┘ -->
+<g id="cls-Membre" class="cls-node" data-name="Membre" data-desc="Classe abstraite. Regroupe les attributs communs à tous les membres du club (joueurs, entraîneurs, dirigeants).">
+  <!-- header -->
+  <rect x="1120" y="80" width="240" height="36" rx="6 6 0 0" fill="#3A1A1A" stroke="#E05252" stroke-width="1.5"/>
+  <text x="1128" y="95" font-family="JetBrains Mono,monospace" font-size="9" fill="#E05252" opacity="0.7">«abstract»</text>
+  <text x="1240" y="109" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#E05252">Membre</text>
+  <!-- attrs -->
+  <rect x="1120" y="116" width="240" height="142" fill="#1A1215" stroke="#E05252" stroke-width="1.5"/>
+  <text x="1128" y="133" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idMembre : int</text>
+  <text x="1128" y="149" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– nom : String</text>
+  <text x="1128" y="165" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– prenom : String</text>
+  <text x="1128" y="181" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateNaissance : Date</text>
+  <text x="1128" y="197" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– telephone : String</text>
+  <text x="1128" y="213" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– email : String</text>
+  <text x="1128" y="229" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– statut : Enum</text>
+  <!-- separator -->
+  <line x1="1120" y1="237" x2="1360" y2="237" stroke="#E05252" stroke-width="0.7" opacity="0.4"/>
+  <!-- methods -->
+  <rect x="1120" y="237" width="240" height="52" rx="0 0 6 6" fill="#160E0E" stroke="#E05252" stroke-width="1.5"/>
+  <text x="1128" y="253" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ getStatut() : String</text>
+  <text x="1128" y="269" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ mettreAJour() : void</text>
+  <text x="1128" y="285" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ estActif() : bool</text>
+</g>
+
+<!-- ┌──────────────────────────
+     │  JOUEUR  (hérite Membre)
+     └────────────────────────── -->
+<g id="cls-Joueur" class="cls-node" data-name="Joueur" data-desc="Hérite de Membre. Représente un joueur licencié ou non. Appartient à une équipe, possède une licence, paie des cotisations.">
+  <rect x="600" y="480" width="230" height="36" rx="6 6 0 0" fill="#3A1818" stroke="#EF8070" stroke-width="1.5"/>
+  <text x="715" y="503" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#EF8070">Joueur</text>
+  <rect x="600" y="516" width="230" height="128" fill="#1A1210" stroke="#EF8070" stroke-width="1.5"/>
+  <text x="608" y="533" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– numLicence : String</text>
+  <text x="608" y="549" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– poste : String</text>
+  <text x="608" y="565" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– categorie : Enum</text>
+  <text x="608" y="581" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateInscription : Date</text>
+  <text x="608" y="597" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– certifMedical : Date</text>
+  <text x="608" y="613" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– nbPresences : int</text>
+  <line x1="600" y1="622" x2="830" y2="622" stroke="#EF8070" stroke-width="0.7" opacity="0.4"/>
+  <rect x="600" y="622" width="230" height="66" rx="0 0 6 6" fill="#160F0E" stroke="#EF8070" stroke-width="1.5"/>
+  <text x="608" y="639" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ estEligible() : bool</text>
+  <text x="608" y="655" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ getStatistiques() : Map</text>
+  <text x="608" y="671" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ payerCotisation() : void</text>
+  <text x="608" y="687" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ emprunterEquip() : void</text>
+</g>
+
+<!-- ┌─────────────────────────────
+     │  ENTRAÎNEUR  (hérite Membre)
+     └───────────────────────────── -->
+<g id="cls-Entraineur" class="cls-node" data-name="Entraineur" data-desc="Hérite de Membre. Planifie les entraînements, sélectionne les joueurs, saisit les statistiques de match.">
+  <rect x="1760" y="480" width="230" height="36" rx="6 6 0 0" fill="#182038" stroke="#4A90E2" stroke-width="1.5"/>
+  <text x="1875" y="503" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#4A90E2">Entraîneur</text>
+  <rect x="1760" y="516" width="230" height="110" fill="#101520" stroke="#4A90E2" stroke-width="1.5"/>
+  <text x="1768" y="533" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– specialite : String</text>
+  <text x="1768" y="549" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– diplome : String</text>
+  <text x="1768" y="565" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– anneeExp : int</text>
+  <text x="1768" y="581" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– equipes : List&lt;Equipe&gt;</text>
+  <line x1="1760" y1="595" x2="1990" y2="595" stroke="#4A90E2" stroke-width="0.7" opacity="0.4"/>
+  <rect x="1760" y="595" width="230" height="66" rx="0 0 6 6" fill="#0D1218" stroke="#4A90E2" stroke-width="1.5"/>
+  <text x="1768" y="612" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ planifierEntrainement()</text>
+  <text x="1768" y="628" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ selectionnerJoueurs()</text>
+  <text x="1768" y="644" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ enregistrerPresences()</text>
+  <text x="1768" y="660" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ saisirStatistiques()</text>
+</g>
+
+<!-- ┌─────────────
+     │  EQUIPE
+     └───────────── -->
+<g id="cls-Equipe" class="cls-node" data-name="Equipe" data-desc="Regroupement de joueurs sous un entraîneur. Catégories: U13, U15, U17, U20, Seniors, Féminines. Effectif min/max selon le club.">
+  <rect x="1120" y="480" width="230" height="36" rx="6 6 0 0" fill="#142418" stroke="#52B788" stroke-width="1.5"/>
+  <text x="1235" y="503" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#52B788">Equipe</text>
+  <rect x="1120" y="516" width="230" height="128" fill="#0E1A11" stroke="#52B788" stroke-width="1.5"/>
+  <text x="1128" y="533" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idEquipe : int</text>
+  <text x="1128" y="549" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– nom : String</text>
+  <text x="1128" y="565" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– categorie : Enum</text>
+  <text x="1128" y="581" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– sport : String</text>
+  <text x="1128" y="597" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– effectifMin : int</text>
+  <text x="1128" y="613" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– effectifMax : int</text>
+  <text x="1128" y="629" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– saison : String</text>
+  <line x1="1120" y1="638" x2="1350" y2="638" stroke="#52B788" stroke-width="0.7" opacity="0.4"/>
+  <rect x="1120" y="638" width="230" height="52" rx="0 0 6 6" fill="#0B1410" stroke="#52B788" stroke-width="1.5"/>
+  <text x="1128" y="655" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ ajouterJoueur() : void</text>
+  <text x="1128" y="671" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ retirerJoueur() : void</text>
+  <text x="1128" y="687" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ getEffectif() : List</text>
+</g>
+
+<!-- ┌──────────────────
+     │  ENTRAINEMENT
+     └────────────────── -->
+<g id="cls-Entrainement" class="cls-node" data-name="Entrainement" data-desc="Séance planifiée par l'entraîneur. Contient la liste de présence. Liée à un terrain et une équipe.">
+  <rect x="120" y="480" width="230" height="36" rx="6 6 0 0" fill="#102030" stroke="#38BDF8" stroke-width="1.5"/>
+  <text x="235" y="503" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#38BDF8">Entrainement</text>
+  <rect x="120" y="516" width="230" height="128" fill="#0C1820" stroke="#38BDF8" stroke-width="1.5"/>
+  <text x="128" y="533" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idEntrainement : int</text>
+  <text x="128" y="549" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– date : Date</text>
+  <text x="128" y="565" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– heureDebut : Time</text>
+  <text x="128" y="581" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– duree : int (min)</text>
+  <text x="128" y="597" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– lieu : String</text>
+  <text x="128" y="613" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– type : Enum</text>
+  <text x="128" y="629" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– statut : Enum</text>
+  <line x1="120" y1="638" x2="350" y2="638" stroke="#38BDF8" stroke-width="0.7" opacity="0.4"/>
+  <rect x="120" y="638" width="230" height="52" rx="0 0 6 6" fill="#081018" stroke="#38BDF8" stroke-width="1.5"/>
+  <text x="128" y="655" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ marquerPresence()</text>
+  <text x="128" y="671" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ annuler() : void</text>
+  <text x="128" y="687" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ getPresents() : List</text>
+</g>
+
+<!-- ┌──────────────────
+     │  COMPETITION
+     └────────────────── -->
+<g id="cls-Competition" class="cls-node" data-name="Competition" data-desc="Championnat, tournoi ou match officiel. Liée à la fédération, aux équipes participantes et aux résultats.">
+  <rect x="1120" y="920" width="230" height="36" rx="6 6 0 0" fill="#2A2210" stroke="#E8A430" stroke-width="1.5"/>
+  <text x="1235" y="943" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#E8A430">Competition</text>
+  <rect x="1120" y="956" width="230" height="128" fill="#1A1608" stroke="#E8A430" stroke-width="1.5"/>
+  <text x="1128" y="973" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idCompetition : int</text>
+  <text x="1128" y="989" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– nom : String</text>
+  <text x="1128" y="1005" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– type : Enum</text>
+  <text x="1128" y="1021" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateDebut : Date</text>
+  <text x="1128" y="1037" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateFin : Date</text>
+  <text x="1128" y="1053" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– lieu : String</text>
+  <text x="1128" y="1069" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– statut : Enum</text>
+  <line x1="1120" y1="1078" x2="1350" y2="1078" stroke="#E8A430" stroke-width="0.7" opacity="0.4"/>
+  <rect x="1120" y="1078" width="230" height="52" rx="0 0 6 6" fill="#161200" stroke="#E8A430" stroke-width="1.5"/>
+  <text x="1128" y="1095" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ inscrireEquipe() : void</text>
+  <text x="1128" y="1111" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ getClassement() : List</text>
+  <text x="1128" y="1127" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ validerInscription()</text>
+</g>
+
+<!-- ┌──────────────────
+     │  LICENCE
+     └────────────────── -->
+<g id="cls-Licence" class="cls-node" data-name="Licence" data-desc="Licence FBF délivrée par la fédération. Obligatoire pour participer aux compétitions officielles. Vérifiée par l'arbitre avant chaque match.">
+  <rect x="380" y="920" width="230" height="36" rx="6 6 0 0" fill="#241838" stroke="#A880F0" stroke-width="1.5"/>
+  <text x="495" y="943" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#A880F0">Licence</text>
+  <rect x="380" y="956" width="230" height="110" fill="#18101E" stroke="#A880F0" stroke-width="1.5"/>
+  <text x="388" y="973" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idLicence : int</text>
+  <text x="388" y="989" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– numero : String</text>
+  <text x="388" y="1005" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateDelivrance : Date</text>
+  <text x="388" y="1021" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateExpiration : Date</text>
+  <text x="388" y="1037" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– statut : Enum</text>
+  <line x1="380" y1="1050" x2="610" y2="1050" stroke="#A880F0" stroke-width="0.7" opacity="0.4"/>
+  <rect x="380" y="1050" width="230" height="52" rx="0 0 6 6" fill="#130C18" stroke="#A880F0" stroke-width="1.5"/>
+  <text x="388" y="1067" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ estValide() : bool</text>
+  <text x="388" y="1083" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ renouveler() : void</text>
+  <text x="388" y="1099" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ getInfos() : String</text>
+</g>
+
+<!-- ┌──────────────────
+     │  COTISATION
+     └────────────────── -->
+<g id="cls-Cotisation" class="cls-node" data-name="Cotisation" data-desc="Paiement périodique du membre. Mensuelle (Vigueur) ou annuelle (MSA, Gomido). Espèces ou Mobile Money. Génère un reçu.">
+  <rect x="120" y="920" width="230" height="36" rx="6 6 0 0" fill="#2A1828" stroke="#F472B6" stroke-width="1.5"/>
+  <text x="235" y="943" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#F472B6">Cotisation</text>
+  <rect x="120" y="956" width="230" height="128" fill="#1A1018" stroke="#F472B6" stroke-width="1.5"/>
+  <text x="128" y="973" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idCotisation : int</text>
+  <text x="128" y="989" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– montant : float</text>
+  <text x="128" y="1005" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– datePaiement : Date</text>
+  <text x="128" y="1021" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– periode : Enum</text>
+  <text x="128" y="1037" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– modePaiement : Enum</text>
+  <text x="128" y="1053" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– statut : Enum</text>
+  <text x="128" y="1069" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– numRecu : String</text>
+  <line x1="120" y1="1078" x2="350" y2="1078" stroke="#F472B6" stroke-width="0.7" opacity="0.4"/>
+  <rect x="120" y="1078" width="230" height="52" rx="0 0 6 6" fill="#160C14" stroke="#F472B6" stroke-width="1.5"/>
+  <text x="128" y="1095" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ genererRecu() : void</text>
+  <text x="128" y="1111" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ estAJour() : bool</text>
+  <text x="128" y="1127" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ envoyerRappel() : void</text>
+</g>
+
+<!-- ┌──────────────────
+     │  EQUIPEMENT
+     └────────────────── -->
+<g id="cls-Equipement" class="cls-node" data-name="Equipement" data-desc="Matériel sportif du club (ballons, maillots, protections…). Géré par l'entraîneur (Vigueur/MSA) ou le CM dédié (Gomido).">
+  <rect x="2080" y="480" width="230" height="36" rx="6 6 0 0" fill="#2A1A18" stroke="#F4705A" stroke-width="1.5"/>
+  <text x="2195" y="503" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#F4705A">Equipement</text>
+  <rect x="2080" y="516" width="230" height="128" fill="#1A1010" stroke="#F4705A" stroke-width="1.5"/>
+  <text x="2088" y="533" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idEquipement : int</text>
+  <text x="2088" y="549" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– nom : String</text>
+  <text x="2088" y="565" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– type : Enum</text>
+  <text x="2088" y="581" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– quantiteTotal : int</text>
+  <text x="2088" y="597" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– quantiteDispo : int</text>
+  <text x="2088" y="613" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– etat : Enum</text>
+  <text x="2088" y="629" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateAcquisition : Date</text>
+  <line x1="2080" y1="638" x2="2310" y2="638" stroke="#F4705A" stroke-width="0.7" opacity="0.4"/>
+  <rect x="2080" y="638" width="230" height="52" rx="0 0 6 6" fill="#160C0A" stroke="#F4705A" stroke-width="1.5"/>
+  <text x="2088" y="655" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ estDisponible() : bool</text>
+  <text x="2088" y="671" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ mettreAJourStock()</text>
+  <text x="2088" y="687" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ signallerPanne() : void</text>
+</g>
+
+<!-- ┌──────────────────
+     │  PRET
+     └────────────────── -->
+<g id="cls-Pret" class="cls-node" data-name="Pret" data-desc="Enregistrement d'un emprunt d'équipement par un joueur. Trace la date de prêt, retour prévu et retour effectif.">
+  <rect x="2080" y="920" width="230" height="36" rx="6 6 0 0" fill="#241808" stroke="#FB923C" stroke-width="1.5"/>
+  <text x="2195" y="943" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#FB923C">Pret</text>
+  <rect x="2080" y="956" width="230" height="110" fill="#181208" stroke="#FB923C" stroke-width="1.5"/>
+  <text x="2088" y="973" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idPret : int</text>
+  <text x="2088" y="989" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– datePret : Date</text>
+  <text x="2088" y="1005" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateRetourPrevu : Date</text>
+  <text x="2088" y="1021" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateRetourEffectif : Date</text>
+  <text x="2088" y="1037" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– statut : Enum</text>
+  <line x1="2080" y1="1050" x2="2310" y2="1050" stroke="#FB923C" stroke-width="0.7" opacity="0.4"/>
+  <rect x="2080" y="1050" width="230" height="52" rx="0 0 6 6" fill="#140E04" stroke="#FB923C" stroke-width="1.5"/>
+  <text x="2088" y="1067" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ enregistrerRetour()</text>
+  <text x="2088" y="1083" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ estEnRetard() : bool</text>
+  <text x="2088" y="1099" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ signalerDommage() : void</text>
+</g>
+
+<!-- ┌──────────────────
+     │  RESULTAT
+     └────────────────── -->
+<g id="cls-Resultat" class="cls-node" data-name="Resultat" data-desc="Score et statistiques d'un match officiel. Saisi par l'arbitre. Déclenche la mise à jour du classement FBF.">
+  <rect x="1760" y="920" width="230" height="36" rx="6 6 0 0" fill="#182818" stroke="#84CC16" stroke-width="1.5"/>
+  <text x="1875" y="943" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#84CC16">Resultat</text>
+  <rect x="1760" y="956" width="230" height="128" fill="#101A08" stroke="#84CC16" stroke-width="1.5"/>
+  <text x="1768" y="973" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idResultat : int</text>
+  <text x="1768" y="989" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– scoreEquipe1 : int</text>
+  <text x="1768" y="1005" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– scoreEquipe2 : int</text>
+  <text x="1768" y="1021" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– buteurs : List&lt;Joueur&gt;</text>
+  <text x="1768" y="1037" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– cartons : List&lt;Carton&gt;</text>
+  <text x="1768" y="1053" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateMatch : Date</text>
+  <text x="1768" y="1069" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– arbitre : String</text>
+  <line x1="1760" y1="1078" x2="1990" y2="1078" stroke="#84CC16" stroke-width="0.7" opacity="0.4"/>
+  <rect x="1760" y="1078" width="230" height="52" rx="0 0 6 6" fill="#0C1404" stroke="#84CC16" stroke-width="1.5"/>
+  <text x="1768" y="1095" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ valider() : void</text>
+  <text x="1768" y="1111" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ getVainqueur() : Equipe</text>
+  <text x="1768" y="1127" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ mettreAJourClassement()</text>
+</g>
+
+<!-- ┌──────────────────
+     │  SANCTION
+     └────────────────── -->
+<g id="cls-Sanction" class="cls-node" data-name="Sanction" data-desc="Sanction disciplinaire (interne ou fédérale). Peut être un carton, une suspension, un avertissement pour impayé.">
+  <rect x="600" y="920" width="230" height="36" rx="6 6 0 0" fill="#1E1E28" stroke="#8892A4" stroke-width="1.5"/>
+  <text x="715" y="943" text-anchor="middle" font-family="Bricolage Grotesque" font-size="13" font-weight="700" fill="#8892A4">Sanction</text>
+  <rect x="600" y="956" width="230" height="128" fill="#141418" stroke="#8892A4" stroke-width="1.5"/>
+  <text x="608" y="973" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– idSanction : int</text>
+  <text x="608" y="989" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– type : Enum</text>
+  <text x="608" y="1005" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– motif : String</text>
+  <text x="608" y="1021" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateDebut : Date</text>
+  <text x="608" y="1037" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– dateFin : Date</text>
+  <text x="608" y="1053" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– source : Enum</text>
+  <text x="608" y="1069" font-family="JetBrains Mono,monospace" font-size="10" fill="#8A94A8">– notifEnvoyee : bool</text>
+  <line x1="600" y1="1078" x2="830" y2="1078" stroke="#8892A4" stroke-width="0.7" opacity="0.4"/>
+  <rect x="600" y="1078" width="230" height="52" rx="0 0 6 6" fill="#101014" stroke="#8892A4" stroke-width="1.5"/>
+  <text x="608" y="1095" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ appliquer() : void</text>
+  <text x="608" y="1111" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ estActive() : bool</text>
+  <text x="608" y="1127" font-family="JetBrains Mono,monospace" font-size="10" fill="#6A7480">+ notifier() : void</text>
+</g>
+
+
+<!-- ═══════════════════════════════════════════════════
+     RELATIONS (tracé orthogonal propre)
+═══════════════════════════════════════════════════════ -->
+
+<!-- ── HÉRITAGE : Membre → Joueur (triangle vide) ── -->
+<!-- Membre bottom-left → Joueur top -->
+<polyline points="1180,289 1180,410 715,410 715,480"
+  fill="none" stroke="#C0C8D8" stroke-width="1.8" marker-start="url(#mh)"/>
+<text x="900" y="402" font-family="JetBrains Mono,monospace" font-size="9" fill="#4E5666">héritage</text>
+
+<!-- ── HÉRITAGE : Membre → Entraîneur ── -->
+<polyline points="1300,289 1300,410 1875,410 1875,480"
+  fill="none" stroke="#C0C8D8" stroke-width="1.8" marker-start="url(#mh)"/>
+<text x="1450" y="402" font-family="JetBrains Mono,monospace" font-size="9" fill="#4E5666">héritage</text>
+
+<!-- ── ASSOCIATION : Joueur → Equipe (appartient à) ── -->
+<!-- Joueur right → Equipe left -->
+<polyline points="830,570 980,570 980,590 1120,590"
+  fill="none" stroke="#4A90E2" stroke-width="1.5" marker-end="url(#ma)"/>
+<text x="860" y="562" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A90E2">appartient à</text>
+<text x="840" y="578" font-family="JetBrains Mono,monospace" font-size="8" fill="#3A4E6A">0..* — 1</text>
+
+<!-- ── ASSOCIATION : Entraîneur → Equipe (encadre) ── -->
+<!-- Entraîneur left → Equipe right -->
+<polyline points="1760,570 1600,570 1600,590 1350,590"
+  fill="none" stroke="#4A90E2" stroke-width="1.5" marker-end="url(#ma)"/>
+<text x="1420" y="562" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A90E2">encadre</text>
+<text x="1430" y="578" font-family="JetBrains Mono,monospace" font-size="8" fill="#3A4E6A">1 — 1..*</text>
+
+<!-- ── COMPOSITION : Equipe → Entrainement (organise) ── -->
+<polyline points="1120,600 980,600 980,690 350,690 350,638"
+  fill="none" stroke="#52B788" stroke-width="1.5" marker-start="url(#mc)"/>
+<text x="420" y="682" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788">organise</text>
+<text x="420" y="698" font-family="JetBrains Mono,monospace" font-size="8" fill="#2E6A48">1 — 0..*</text>
+
+<!-- ── AGRÉGATION : Equipe → Competition (participe) ── -->
+<polyline points="1235,920 1235,860 1235,860"
+  fill="none" stroke="#E8A430" stroke-width="1.5" marker-end="url(#mg)"/>
+<line x1="1235" y1="860" x2="1235" y2="756" stroke="#E8A430" stroke-width="1.5"/>
+<text x="1244" y="840" font-family="JetBrains Mono,monospace" font-size="9" fill="#E8A430">participe à</text>
+<text x="1244" y="856" font-family="JetBrains Mono,monospace" font-size="8" fill="#6A5020">0..* — 0..*</text>
+
+<!-- ── COMPOSITION : Joueur → Cotisation ── -->
+<polyline points="715,688 715,840 235,840 235,920"
+  fill="none" stroke="#52B788" stroke-width="1.5" marker-start="url(#mc)"/>
+<text x="320" y="832" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788">paie</text>
+<text x="305" y="848" font-family="JetBrains Mono,monospace" font-size="8" fill="#2E6A48">1 — 0..*</text>
+
+<!-- ── ASSOCIATION : Joueur → Licence ── -->
+<polyline points="600,880 495,880 495,920"
+  fill="none" stroke="#4A90E2" stroke-width="1.5" marker-end="url(#ma)"/>
+<text x="508" y="895" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A90E2">possède</text>
+<text x="508" y="911" font-family="JetBrains Mono,monospace" font-size="8" fill="#3A4E6A">1 — 0..1</text>
+
+<!-- ── ASSOCIATION : Joueur → Sanction ── -->
+<polyline points="715,688 715,920"
+  fill="none" stroke="#4A90E2" stroke-width="1.5" marker-end="url(#ma)"/>
+<text x="724" y="820" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A90E2">reçoit</text>
+<text x="724" y="836" font-family="JetBrains Mono,monospace" font-size="8" fill="#3A4E6A">1 — 0..*</text>
+
+<!-- ── COMPOSITION : Equipement → Pret ── -->
+<polyline points="2195,916 2195,920"
+  fill="none" stroke="#52B788" stroke-width="1.5" marker-start="url(#mc)"/>
+<line x1="2195" y1="860" x2="2195" y2="920" stroke="#52B788" stroke-width="1.5"/>
+<text x="2204" y="900" font-family="JetBrains Mono,monospace" font-size="9" fill="#52B788">génère</text>
+<text x="2204" y="916" font-family="JetBrains Mono,monospace" font-size="8" fill="#2E6A48">1 — 0..*</text>
+
+<!-- ── ASSOCIATION : Joueur → Pret ── -->
+<polyline points="830,650 2050,650 2050,980 2080,980"
+  fill="none" stroke="#4A90E2" stroke-width="1.5" marker-end="url(#ma)"/>
+<text x="1300" y="642" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A90E2">emprunte →</text>
+<text x="1300" y="658" font-family="JetBrains Mono,monospace" font-size="8" fill="#3A4E6A">0..* — 0..*</text>
+
+<!-- ── ASSOCIATION : Competition → Resultat ── -->
+<polyline points="1350,1050 1600,1050 1600,980 1760,980"
+  fill="none" stroke="#4A90E2" stroke-width="1.5" marker-end="url(#ma)"/>
+<text x="1460" y="1042" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A90E2">produit</text>
+<text x="1460" y="1058" font-family="JetBrains Mono,monospace" font-size="8" fill="#3A4E6A">1 — 0..*</text>
+
+<!-- ── ASSOCIATION : Resultat → Equipe ── -->
+<polyline points="1875,920 1875,860 1350,860 1350,756"
+  fill="none" stroke="#4A90E2" stroke-width="1.5" marker-end="url(#ma)"/>
+<text x="1380" y="852" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A90E2">concerne</text>
+
+<!-- ── ASSOCIATION : Entrainement → Joueur (présence) ── -->
+<polyline points="350,516 350,440 600,440 600,516"
+  fill="none" stroke="#4A90E2" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ms)"/>
+<text x="380" y="432" font-family="JetBrains Mono,monospace" font-size="9" fill="#5A6478">présence</text>
+
+<!-- ── ASSOCIATION : Licence → Competition (requise pour) ── -->
+<polyline points="610,1010 850,1010 850,1110 1120,1110"
+  fill="none" stroke="#4A90E2" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ms)"/>
+<text x="700" y="1002" font-family="JetBrains Mono,monospace" font-size="9" fill="#5A6478">requise pour</text>
+
+<!-- ── ASSOCIATION : Cotisation → Equipe (conditionne accès) ── -->
+<polyline points="350,956 350,800 1120,800 1120,756"
+  fill="none" stroke="#F472B6" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ms)"/>
+<text x="500" y="792" font-family="JetBrains Mono,monospace" font-size="9" fill="#F472B6">conditionne accès (Vigueur)</text>
+
+<!-- ── NOTE: Entraîneur gère Equipement (Vigueur/MSA) ── -->
+<polyline points="1990,550 2050,550 2050,550 2080,550"
+  fill="none" stroke="#5A6478" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#ms)"/>
+<text x="1995" y="542" font-family="JetBrains Mono,monospace" font-size="9" fill="#5A6478">gère matériel</text>
+<text x="1995" y="558" font-family="JetBrains Mono,monospace" font-size="8" fill="#3A4050">(Vigueur &amp; MSA)</text>
+
+<!-- ═══ FOOTER ═══ -->
+<rect x="0" y="1860" width="3000" height="40" fill="#0D0F14"/>
+<text x="1500" y="1883" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#252C3A">Diagramme de Classes · Gestion Club Sportif · Bénin · Sources : Vigueur FC · MSA · AS Gomido</text>
+<text x="1500" y="1897" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1E2430">12 classes · héritage · association · composition · agrégation</text>
+
+</svg>
+</div>
+</div>
+
+<div class="tt" id="tt">
+  <div class="tt-name" id="tt-n"></div>
+  <div class="tt-desc" id="tt-d"></div>
 </div>
 
 <script>
-// ── Tooltip on UC hover ──
-const tooltip = document.getElementById('tooltip');
-const ttActor = document.getElementById('tt-actor');
-const ttUc = document.getElementById('tt-uc');
-const ttDesc = document.getElementById('tt-desc');
-
-const actorNames = {
-  J:'Joueur', E:'Entraîneur', P:'Président', SG:'Secrétaire Général',
-  T:'Trésorier', CM:'Resp. Matériel', A:'Arbitre', F:'Fédération'
-};
-
-document.querySelectorAll('.uc-node[data-title]').forEach(node => {
-  node.style.cursor = 'pointer';
-
-  node.addEventListener('mouseenter', e => {
-    const actors = (node.dataset.actor || '').split(',').map(a => actorNames[a.trim()]).filter(Boolean);
-    ttActor.textContent = actors.join(' · ');
-    ttActor.style.color = '#4A90E2';
-    ttUc.textContent = node.dataset.title || '';
-    ttDesc.textContent = node.dataset.desc || '';
-    tooltip.classList.add('show');
-    positionTooltip(e);
-  });
-
-  node.addEventListener('mousemove', positionTooltip);
-
-  node.addEventListener('mouseleave', () => {
-    tooltip.classList.remove('show');
-  });
-
-  // highlight on click
-  node.addEventListener('click', () => {
-    document.querySelectorAll('.uc-node ellipse').forEach(el => {
-      el.style.filter = '';
-      el.style.opacity = '';
-    });
-    const ell = node.querySelector('ellipse');
-    if (ell) {
-      ell.style.filter = 'drop-shadow(0 0 8px currentColor)';
-      ell.style.opacity = '1';
-    }
-  });
+const tt=document.getElementById('tt'),ttn=document.getElementById('tt-n'),ttd=document.getElementById('tt-d');
+document.querySelectorAll('.cls-node').forEach(n=>{
+  n.style.cursor='pointer';
+  n.addEventListener('mouseenter',e=>{ttn.textContent=n.dataset.name||'';ttd.textContent=n.dataset.desc||'';tt.classList.add('on');pos(e)});
+  n.addEventListener('mousemove',pos);
+  n.addEventListener('mouseleave',()=>tt.classList.remove('on'));
 });
-
-function positionTooltip(e) {
-  const x = e.clientX + 16, y = e.clientY - 10;
-  tooltip.style.left = Math.min(x, window.innerWidth - 260) + 'px';
-  tooltip.style.top = Math.max(y, 10) + 'px';
+function pos(e){const x=e.clientX+14,y=e.clientY-6;tt.style.left=Math.min(x,window.innerWidth-260)+'px';tt.style.top=Math.max(y,6)+'px'}
+function hl(name){
+  const colors={Membre:'#E05252',Joueur:'#EF8070',Entraineur:'#4A90E2',Equipe:'#52B788',Entrainement:'#38BDF8',Competition:'#E8A430',Licence:'#A880F0',Cotisation:'#F472B6',Equipement:'#F4705A',Pret:'#FB923C',Resultat:'#84CC16',Sanction:'#8892A4'};
+  document.querySelectorAll('.cls-node rect:first-child').forEach(r=>r.style.opacity='0.2');
+  const el=document.getElementById('cls-'+name);
+  if(el)el.querySelectorAll('rect').forEach(r=>r.style.opacity='1');
+  setTimeout(()=>document.querySelectorAll('.cls-node rect').forEach(r=>r.style.opacity=''),2500);
 }
-
-// ── Actor highlight from sidebar ──
-function highlightActor(actorId) {
-  document.querySelectorAll('.uc-node ellipse').forEach(el => {
-    el.style.opacity = '0.2';
-  });
-  document.querySelectorAll(`.uc-node[data-actor*="${actorId}"] ellipse`).forEach(el => {
-    el.style.opacity = '1';
-    el.style.filter = 'drop-shadow(0 0 6px currentColor)';
-  });
-  document.querySelectorAll('.actor-item').forEach(i => i.classList.remove('active'));
-  setTimeout(() => {
-    document.querySelectorAll('.uc-node ellipse').forEach(el => {
-      el.style.opacity = '';
-      el.style.filter = '';
-    });
-  }, 2500);
-}
-
-// ── Reset zoom ──
-function resetZoom() {
-  document.getElementById('canvasWrap').scrollTo(0, 0);
-}
-
-// ── Download SVG ──
-function downloadSVG() {
-  const svg = document.getElementById('mainSvg');
-  const serializer = new XMLSerializer();
-  let source = serializer.serializeToString(svg);
-  source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-  const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "diagramme_cas_utilisation_club_sportif.svg";
-  link.click();
+function dlSVG(){
+  const sv=document.getElementById('svg'),s=new XMLSerializer();
+  let src='<?xml version="1.0" standalone="no"?>\r\n'+s.serializeToString(sv);
+  const a=document.createElement('a');a.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(src);a.download='diagramme_classes_club_sportif.svg';a.click();
 }
 </script>
 </body>
